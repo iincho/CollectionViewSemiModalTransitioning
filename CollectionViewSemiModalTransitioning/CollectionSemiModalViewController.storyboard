@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FOB-jc-TtN">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Collection Semi Modal View Controller-->
+        <scene sceneID="k2J-BU-Cb1">
+            <objects>
+                <viewController storyboardIdentifier="CollectionSemiModalViewController" id="FOB-jc-TtN" customClass="CollectionSemiModalViewController" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0Me-mp-gbL">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Klc-14-dde">
+                                <rect key="frame" x="0.0" y="220" width="375" height="447"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewLayout key="collectionViewLayout" id="mGi-aJ-kiy" customClass="CustomCollectionViewFlowLayout" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target"/>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7QP-x9-r8o">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="bottom" secondItem="0Me-mp-gbL" secondAttribute="bottom" id="VxA-K0-fEZ"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="leading" secondItem="TdF-e1-3nn" secondAttribute="leading" id="c6t-f4-olm"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="TdF-e1-3nn" secondAttribute="top" constant="200" id="rj6-b9-En0"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="trailing" secondItem="TdF-e1-3nn" secondAttribute="trailing" id="scG-bi-3LN"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="TdF-e1-3nn"/>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="Klc-14-dde" id="9wa-Yq-rvb"/>
+                        <outlet property="layout" destination="mGi-aJ-kiy" id="Nhf-hj-9h0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZV3-su-mbb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="108" y="182.15892053973016"/>
+        </scene>
+    </scenes>
+</document>

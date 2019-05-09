@@ -12,6 +12,15 @@
 		9853195C2211CC5800378DA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9853195A2211CC5800378DA5 /* Main.storyboard */; };
 		9853195E2211CC5B00378DA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9853195D2211CC5B00378DA5 /* Assets.xcassets */; };
 		985319612211CC5B00378DA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9853195F2211CC5B00378DA5 /* LaunchScreen.storyboard */; };
+		98E3C5C12217CE3C00DDDD72 /* CollectionSemiModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */; };
+		98E3C5C32217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */; };
+		98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5E6223382A700DDDD72 /* Extensions.swift */; };
+		98E3C5EC2233890C00DDDD72 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */; };
+		98E3C5ED2233890C00DDDD72 /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */; };
+		98E3C5EF22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */; };
+		98E3C5F1223932A400DDDD72 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5F0223932A400DDDD72 /* DetailViewController.swift */; };
+		98E3C5F3223932B300DDDD72 /* DetailViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */; };
+		98E3C5F9224376ED00DDDD72 /* CustomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +31,15 @@
 		9853195D2211CC5B00378DA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		985319602211CC5B00378DA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		985319622211CC5B00378DA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSemiModalViewController.swift; sourceTree = "<group>"; };
+		98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CollectionSemiModalViewController.storyboard; sourceTree = "<group>"; };
+		98E3C5E6223382A700DDDD72 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell.xib; sourceTree = "<group>"; };
+		98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewPresentAnimator.swift; sourceTree = "<group>"; };
+		98E3C5F0223932A400DDDD72 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailViewController.storyboard; sourceTree = "<group>"; };
+		98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +78,15 @@
 				9853195D2211CC5B00378DA5 /* Assets.xcassets */,
 				9853195F2211CC5B00378DA5 /* LaunchScreen.storyboard */,
 				985319622211CC5B00378DA5 /* Info.plist */,
+				98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */,
+				98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */,
+				98E3C5E6223382A700DDDD72 /* Extensions.swift */,
+				98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */,
+				98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */,
+				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
+				98E3C5F0223932A400DDDD72 /* DetailViewController.swift */,
+				98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */,
+				98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */,
 			);
 			path = CollectionViewSemiModalTransitioning;
 			sourceTree = "<group>";
@@ -123,8 +150,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				985319612211CC5B00378DA5 /* LaunchScreen.storyboard in Resources */,
+				98E3C5C32217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard in Resources */,
 				9853195E2211CC5B00378DA5 /* Assets.xcassets in Resources */,
 				9853195C2211CC5800378DA5 /* Main.storyboard in Resources */,
+				98E3C5F3223932B300DDDD72 /* DetailViewController.storyboard in Resources */,
+				98E3C5ED2233890C00DDDD72 /* CollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,8 +165,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98E3C5EC2233890C00DDDD72 /* CollectionViewCell.swift in Sources */,
+				98E3C5EF22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift in Sources */,
+				98E3C5C12217CE3C00DDDD72 /* CollectionSemiModalViewController.swift in Sources */,
 				985319592211CC5800378DA5 /* ViewController.swift in Sources */,
 				985319572211CC5800378DA5 /* AppDelegate.swift in Sources */,
+				98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */,
+				98E3C5F1223932A400DDDD72 /* DetailViewController.swift in Sources */,
+				98E3C5F9224376ED00DDDD72 /* CustomTransition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,7 +325,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.CollectionViewSemiModalTransitioning.CollectionViewSemiModalTransitioning;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CollectionViewSemiModalTransitioning;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -307,7 +343,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.CollectionViewSemiModalTransitioning.CollectionViewSemiModalTransitioning;
+				PRODUCT_BUNDLE_IDENTIFIER = com.CollectionViewSemiModalTransitioning;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
