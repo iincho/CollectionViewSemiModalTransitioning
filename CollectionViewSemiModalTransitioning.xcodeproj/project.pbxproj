@@ -72,23 +72,31 @@
 		985319552211CC5800378DA5 /* CollectionViewSemiModalTransitioning */ = {
 			isa = PBXGroup;
 			children = (
+				9878E9B022BDE1AE00E7C37A /* CollectionViewSemiModal */,
 				985319562211CC5800378DA5 /* AppDelegate.swift */,
 				985319582211CC5800378DA5 /* ViewController.swift */,
 				9853195A2211CC5800378DA5 /* Main.storyboard */,
 				9853195D2211CC5B00378DA5 /* Assets.xcassets */,
 				9853195F2211CC5B00378DA5 /* LaunchScreen.storyboard */,
 				985319622211CC5B00378DA5 /* Info.plist */,
-				98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */,
-				98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */,
 				98E3C5E6223382A700DDDD72 /* Extensions.swift */,
-				98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */,
-				98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */,
-				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
 				98E3C5F0223932A400DDDD72 /* DetailViewController.swift */,
 				98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */,
 				98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */,
 			);
 			path = CollectionViewSemiModalTransitioning;
+			sourceTree = "<group>";
+		};
+		9878E9B022BDE1AE00E7C37A /* CollectionViewSemiModal */ = {
+			isa = PBXGroup;
+			children = (
+				98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */,
+				98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */,
+				98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */,
+				98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */,
+				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
+			);
+			path = CollectionViewSemiModal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
