@@ -8,20 +8,56 @@
 
 import UIKit
 
-final class CollectionSemiModalViewController: UIViewController {
+final class CollectionSemiModalViewController: UIViewController, OverCurrentTransitionable {
+    var percentThreshold: CGFloat = 0.8
+    var interactor = OverCurrentTransitioningInteractor()
+    
+    private var tableViewContentOffsetY: CGFloat = 0
+    private var isScrollingCollectionView: Bool = false
+    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var layout: CustomCollectionViewFlowLayout!
-    
-    private let customTransition = CustomTransition()
     
     private var indexOfCellBeforeDragging = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .clear
+
+        setupViews()
+        
+        interactor.startHandler = { [weak self] in
+            self?.collectionView.visibleCells
+                .compactMap { $0 as? CollectionViewCell }
+                .forEach { $0.updateBounces(false) }
+        }
+        interactor.resetHandler = { [weak self] in
+            self?.collectionView.visibleCells
+                .compactMap { $0 as? CollectionViewCell }
+                .forEach { $0.updateBounces(true) }
+        }
+    }
+    
+    private func setupViews() {
+        let collectionViewGesture = UIPanGestureRecognizer(target: self, action: #selector(collectionViewDidScroll(_:)))
+        collectionViewGesture.delegate = self
+        collectionView.addGestureRecognizer(collectionViewGesture)
+
         collectionView.register(cellType: CollectionViewCell.self)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = .clear
         layout.prepare()
+
+    }
+    
+    @objc private func collectionViewDidScroll(_ sender: UIPanGestureRecognizer) {
+        if isScrollingCollectionView { return }
+        if tableViewContentOffsetY <= 0 {
+            interactor.updateStateShouldStartIfNeeded()
+        }
+        interactor.setStartInteractionTranslationY(sender.translation(in: view).y)
+        handleTransitionGesture(sender)
     }
     
     private func indexOfMajorCell() -> Int {
@@ -40,23 +76,28 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: CollectionViewCell = collectionView.dequeueReusableCell(with: CollectionViewCell.self, for: indexPath)
-        cell.configure(number: indexPath.row)
+        let cell = collectionView.dequeueReusableCell(with: CollectionViewCell.self, for: indexPath)
+        cell.configure(headerHeight:150, number: indexPath.row)
+        cell.scrollViewDidScrollHandler = { [weak self] offsetY in
+            self?.tableViewContentOffsetY = offsetY
+            print("No: \(indexPath.row) offsetY: \(offsetY)")
+        }
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = DetailViewController.make(num: indexPath.row)
-        let nc = UINavigationController(rootViewController: vc)
-        nc.transitioningDelegate = customTransition
-        present(nc, animated: true, completion: nil)
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let cell = collectionView.dequeueReusableCell(with: CollectionViewCell.self, for: indexPath)
+        cell.scrollToTop()
     }
-    
+
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         indexOfCellBeforeDragging = indexOfMajorCell()
+        isScrollingCollectionView = true
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        isScrollingCollectionView = false
+        
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
 
@@ -98,11 +139,11 @@ extension CollectionSemiModalViewController {
     }
 }
 
-//extension CollectionSemiModalViewController: UIViewControllerTransitioningDelegate {
-//    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//        return customTransition
-//    }
-//}
+extension CollectionSemiModalViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
 
 final class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
     private let kFlickVelocityThreshold: CGFloat = 0.2
@@ -124,5 +165,3 @@ final class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         scrollDirection = .horizontal
     }
 }
-
-

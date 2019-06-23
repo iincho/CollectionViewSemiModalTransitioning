@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,32 +19,21 @@
                 <rect key="frame" x="0.0" y="0.0" width="345" height="376"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3fS-iv-34l">
-                        <rect key="frame" x="0.0" y="0.0" width="345" height="24"/>
-                        <color key="backgroundColor" red="0.8930065505" green="0.8930065505" blue="0.8930065505" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YES-gd-c5G">
-                        <rect key="frame" x="0.0" y="24" width="345" height="352"/>
+                        <rect key="frame" x="0.0" y="0.0" width="345" height="376"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tableView>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="YES-gd-c5G" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="10H-CX-UdZ"/>
-                <constraint firstItem="3fS-iv-34l" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="2DB-GS-pN3"/>
-                <constraint firstAttribute="bottom" secondItem="YES-gd-c5G" secondAttribute="bottom" id="CwZ-tY-WU5"/>
-                <constraint firstItem="3fS-iv-34l" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="d0C-CF-coY"/>
-                <constraint firstItem="YES-gd-c5G" firstAttribute="top" secondItem="3fS-iv-34l" secondAttribute="bottom" id="fYA-b2-FzZ"/>
-                <constraint firstAttribute="trailing" secondItem="3fS-iv-34l" secondAttribute="trailing" id="qLh-tm-W0b"/>
-                <constraint firstAttribute="trailing" secondItem="YES-gd-c5G" secondAttribute="trailing" id="yVi-Ea-jjH"/>
+                <constraint firstAttribute="bottom" secondItem="YES-gd-c5G" secondAttribute="bottom" id="aMm-PQ-jXf"/>
+                <constraint firstItem="YES-gd-c5G" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="mik-BQ-lzj"/>
+                <constraint firstAttribute="trailing" secondItem="YES-gd-c5G" secondAttribute="trailing" id="tej-1e-oS3"/>
+                <constraint firstItem="YES-gd-c5G" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="wVS-Bm-wjM"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="345" height="376"/>
             <connections>
-                <outlet property="headerLabel" destination="3fS-iv-34l" id="Dq3-7G-Xx1"/>
                 <outlet property="tableView" destination="YES-gd-c5G" id="R0Y-Cl-khv"/>
             </connections>
             <point key="canvasLocation" x="98.400000000000006" y="161.01949025487258"/>

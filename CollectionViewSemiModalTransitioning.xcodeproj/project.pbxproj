@@ -12,6 +12,11 @@
 		9853195C2211CC5800378DA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9853195A2211CC5800378DA5 /* Main.storyboard */; };
 		9853195E2211CC5B00378DA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9853195D2211CC5B00378DA5 /* Assets.xcassets */; };
 		985319612211CC5B00378DA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9853195F2211CC5B00378DA5 /* LaunchScreen.storyboard */; };
+		9878E9BE22BE028B00E7C37A /* ModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9878E9BA22BE028B00E7C37A /* ModalPresentationController.swift */; };
+		9878E9BF22BE028B00E7C37A /* OverCurrentTransitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9878E9BB22BE028B00E7C37A /* OverCurrentTransitionable.swift */; };
+		9878E9C022BE028B00E7C37A /* DismissAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9878E9BC22BE028B00E7C37A /* DismissAnimator.swift */; };
+		9878E9C122BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9878E9BD22BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift */; };
+		9878E9C322BE06B600E7C37A /* OverCurrentTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9878E9C222BE06B600E7C37A /* OverCurrentTransitioning.swift */; };
 		98E3C5C12217CE3C00DDDD72 /* CollectionSemiModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */; };
 		98E3C5C32217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */; };
 		98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5E6223382A700DDDD72 /* Extensions.swift */; };
@@ -31,6 +36,11 @@
 		9853195D2211CC5B00378DA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		985319602211CC5B00378DA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		985319622211CC5B00378DA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9878E9BA22BE028B00E7C37A /* ModalPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalPresentationController.swift; sourceTree = "<group>"; };
+		9878E9BB22BE028B00E7C37A /* OverCurrentTransitionable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverCurrentTransitionable.swift; sourceTree = "<group>"; };
+		9878E9BC22BE028B00E7C37A /* DismissAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissAnimator.swift; sourceTree = "<group>"; };
+		9878E9BD22BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverCurrentTransitioningInteractor.swift; sourceTree = "<group>"; };
+		9878E9C222BE06B600E7C37A /* OverCurrentTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverCurrentTransitioning.swift; sourceTree = "<group>"; };
 		98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSemiModalViewController.swift; sourceTree = "<group>"; };
 		98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CollectionSemiModalViewController.storyboard; sourceTree = "<group>"; };
 		98E3C5E6223382A700DDDD72 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -72,6 +82,7 @@
 		985319552211CC5800378DA5 /* CollectionViewSemiModalTransitioning */ = {
 			isa = PBXGroup;
 			children = (
+				9878E9B122BE025100E7C37A /* SemiModalTransitioning */,
 				9878E9B022BDE1AE00E7C37A /* CollectionViewSemiModal */,
 				985319562211CC5800378DA5 /* AppDelegate.swift */,
 				985319582211CC5800378DA5 /* ViewController.swift */,
@@ -97,6 +108,18 @@
 				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
 			);
 			path = CollectionViewSemiModal;
+			sourceTree = "<group>";
+		};
+		9878E9B122BE025100E7C37A /* SemiModalTransitioning */ = {
+			isa = PBXGroup;
+			children = (
+				9878E9BC22BE028B00E7C37A /* DismissAnimator.swift */,
+				9878E9BA22BE028B00E7C37A /* ModalPresentationController.swift */,
+				9878E9BB22BE028B00E7C37A /* OverCurrentTransitionable.swift */,
+				9878E9BD22BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift */,
+				9878E9C222BE06B600E7C37A /* OverCurrentTransitioning.swift */,
+			);
+			path = SemiModalTransitioning;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,8 +198,13 @@
 			files = (
 				98E3C5EC2233890C00DDDD72 /* CollectionViewCell.swift in Sources */,
 				98E3C5EF22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift in Sources */,
+				9878E9C122BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift in Sources */,
+				9878E9BF22BE028B00E7C37A /* OverCurrentTransitionable.swift in Sources */,
 				98E3C5C12217CE3C00DDDD72 /* CollectionSemiModalViewController.swift in Sources */,
 				985319592211CC5800378DA5 /* ViewController.swift in Sources */,
+				9878E9C322BE06B600E7C37A /* OverCurrentTransitioning.swift in Sources */,
+				9878E9BE22BE028B00E7C37A /* ModalPresentationController.swift in Sources */,
+				9878E9C022BE028B00E7C37A /* DismissAnimator.swift in Sources */,
 				985319572211CC5800378DA5 /* AppDelegate.swift in Sources */,
 				98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */,
 				98E3C5F1223932A400DDDD72 /* DetailViewController.swift in Sources */,

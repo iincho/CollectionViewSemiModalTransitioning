@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FOB-jc-TtN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FOB-jc-TtN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,8 +19,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Klc-14-dde">
-                                <rect key="frame" x="0.0" y="220" width="375" height="447"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="mGi-aJ-kiy" customClass="CustomCollectionViewFlowLayout" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target"/>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7QP-x9-r8o">
@@ -38,7 +38,7 @@
                         <constraints>
                             <constraint firstItem="Klc-14-dde" firstAttribute="bottom" secondItem="0Me-mp-gbL" secondAttribute="bottom" id="VxA-K0-fEZ"/>
                             <constraint firstItem="Klc-14-dde" firstAttribute="leading" secondItem="TdF-e1-3nn" secondAttribute="leading" id="c6t-f4-olm"/>
-                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="TdF-e1-3nn" secondAttribute="top" constant="200" id="rj6-b9-En0"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="TdF-e1-3nn" secondAttribute="top" id="rj6-b9-En0"/>
                             <constraint firstItem="Klc-14-dde" firstAttribute="trailing" secondItem="TdF-e1-3nn" secondAttribute="trailing" id="scG-bi-3LN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TdF-e1-3nn"/>

@@ -10,28 +10,35 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet private weak var headerLabel: UILabel!
+    var scrollViewDidScrollHandler: ((_ offsetY: CGFloat) -> Void)?
     
-    private var tableViewContentOffsetY: CGFloat = 0
+    @IBOutlet weak var tableView: UITableView!
+    
+    private var number: Int!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        contentView.backgroundColor = .clear
+        
+        tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.isScrollEnabled = false
-        
-        contentView.layer.borderColor = UIColor.gray.cgColor
-        contentView.layer.borderWidth = 1
-        contentView.layer.cornerRadius = 10
-        contentView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        contentView.clipsToBounds = true
+        tableView.tableHeaderView = UIView(frame: .zero)
     }
     
-    func configure(number: Int) {
-        headerLabel.text = "Header No.\(number)"
+    func configure(headerHeight: CGFloat, number: Int) {
+        self.number = number
+        tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: headerHeight)
         tableView.reloadData()
+    }
+    
+    func scrollToTop() {
+        tableView.contentOffset = .zero
+    }
+    
+    func updateBounces(_ isBounces: Bool) {
+        tableView.bounces = isBounces
     }
 }
 
@@ -42,11 +49,21 @@ extension CollectionViewCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
-        cell.textLabel?.text = String(indexPath.row)
+        
+        if indexPath.row == 0 {
+            cell.layer.cornerRadius = 10
+            cell.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+            cell.clipsToBounds = true
+            cell.textLabel?.text = "No. \(number!)"
+        } else {
+            cell.textLabel?.text = String(indexPath.row)
+        }
+        
+        
         return cell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        tableViewContentOffsetY = scrollView.contentOffset.y
+        scrollViewDidScrollHandler?(scrollView.contentOffset.y)
     }
 }
