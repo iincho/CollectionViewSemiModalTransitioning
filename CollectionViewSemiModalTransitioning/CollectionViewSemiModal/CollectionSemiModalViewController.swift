@@ -11,9 +11,10 @@ import UIKit
 final class CollectionSemiModalViewController: UIViewController, OverCurrentTransitionable {
     var percentThreshold: CGFloat = 0.8
     var interactor = OverCurrentTransitioningInteractor()
-    
+
+    private let cellHeaderHeight: CGFloat = 150
     private var tableViewContentOffsetY: CGFloat = 0
-    private var isScrollingCollectionView: Bool = false
+    private var isScrollingCollectionView = false
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var layout: CustomCollectionViewFlowLayout!
@@ -77,12 +78,36 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(with: CollectionViewCell.self, for: indexPath)
-        cell.configure(headerHeight:150, number: indexPath.row)
+        let baseRect = cell.frame
+        cell.tag = indexPath.row
+        cell.configure(headerHeight: cellHeaderHeight, number: indexPath.row)
         cell.scrollViewDidScrollHandler = { [weak self] offsetY in
             self?.tableViewContentOffsetY = offsetY
-            print("No: \(indexPath.row) offsetY: \(offsetY)")
+            self?.transformCell(cell, baseRect: baseRect)
         }
         return cell
+    }
+    
+    private func transformCell(_ cell: CollectionViewCell, baseRect: CGRect) {
+        let verticalMovement = tableViewContentOffsetY / cellHeaderHeight * 0.5
+        let upwardMovement = fmaxf(Float(verticalMovement), 0.0)
+        let upwardMovementPercent = fminf(upwardMovement, 1.0)
+        let transformX = Float(view.frame.width - baseRect.size.width) * upwardMovementPercent
+        let newPosX = Float(baseRect.origin.x) - transformX / 2
+        let newWidth = baseRect.size.width + CGFloat(transformX)
+        // 中央のCellを操作
+        cell.frame = CGRect(x: CGFloat(newPosX),
+                            y: baseRect.origin.y,
+                            width: newWidth,
+                            height: baseRect.size.height)
+        // 前後のCollectionViewCellを動かす。かなり力技
+        collectionView.visibleCells.forEach { vCell in
+            if vCell.tag < cell.tag {
+                vCell.frame.origin.x = (baseRect.origin.x - layout.pageWidth) - CGFloat(transformX / 2)
+            } else if cell.tag < vCell.tag {
+                vCell.frame.origin.x = (baseRect.origin.x + layout.pageWidth) + CGFloat(transformX / 2)
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -146,12 +171,14 @@ extension CollectionSemiModalViewController: UIGestureRecognizerDelegate {
 }
 
 final class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
+    let edgeSideMargin: CGFloat = 24
+    
     private let kFlickVelocityThreshold: CGFloat = 0.2
-    private let edgeSideMargin: CGFloat = 24
-    private let lineSpacing: CGFloat = 10
+    private let lineSpacing: CGFloat = 8
     
     var pageWidth: CGFloat {
-        return itemSize.width + minimumLineSpacing
+        let width = collectionView!.frame.width - edgeSideMargin * 2
+        return width + minimumLineSpacing
     }
     
     override func prepare() {
