@@ -89,7 +89,11 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
     
     private func transformCell(_ cell: CollectionViewCell, baseRect: CGRect) {
-        let verticalMovement = tableViewContentOffsetY / cellHeaderHeight * 0.5
+        /// Cellが拡大中は横スクロールできないようにせ
+        collectionView.isScrollEnabled = tableViewContentOffsetY == 0
+        /// CellWidthが画面幅まで拡大するのが完了する高さ
+        let targetHeight = cellHeaderHeight + 100
+        let verticalMovement = tableViewContentOffsetY / targetHeight
         let upwardMovement = fmaxf(Float(verticalMovement), 0.0)
         let upwardMovementPercent = fminf(upwardMovement, 1.0)
         let transformX = Float(view.frame.width - baseRect.size.width) * upwardMovementPercent
@@ -100,7 +104,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
                             y: baseRect.origin.y,
                             width: newWidth,
                             height: baseRect.size.height)
-        // 前後のCollectionViewCellを動かす。かなり力技
+        // 前後のCollectionViewCellを動かす。
         collectionView.visibleCells.forEach { vCell in
             if vCell.tag < cell.tag {
                 vCell.frame.origin.x = (baseRect.origin.x - layout.pageWidth) - CGFloat(transformX / 2)
@@ -121,6 +125,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        /// CollectionViewの横スクロールを必ず中央で止まるように制御
         isScrollingCollectionView = false
         
         // Stop scrollView sliding:
