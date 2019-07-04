@@ -14,10 +14,11 @@ class ViewController: UIViewController {
     
     @IBAction func collectionViewDidTap(_ sender: Any) {
         let vc = CollectionSemiModalViewController.make()
+        let nv = UINavigationController(rootViewController: vc)
         customTransition.interactor = vc.interactor
-        vc.transitioningDelegate = customTransition
-        vc.modalPresentationStyle = .custom
-        present(vc, animated: true, completion: nil)
+        nv.transitioningDelegate = customTransition
+        nv.modalPresentationStyle = .custom
+        present(nv, animated: true, completion: nil)
     }
 }
 

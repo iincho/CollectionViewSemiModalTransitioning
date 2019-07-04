@@ -13,13 +13,13 @@
         <!--Collection Semi Modal View Controller-->
         <scene sceneID="k2J-BU-Cb1">
             <objects>
-                <viewController storyboardIdentifier="CollectionSemiModalViewController" id="FOB-jc-TtN" customClass="CollectionSemiModalViewController" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CollectionSemiModalViewController" automaticallyAdjustsScrollViewInsets="NO" id="FOB-jc-TtN" customClass="CollectionSemiModalViewController" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Me-mp-gbL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Klc-14-dde">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="mGi-aJ-kiy" customClass="CustomCollectionViewFlowLayout" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target"/>
                                 <cells>
@@ -38,7 +38,7 @@
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Klc-14-dde" secondAttribute="bottom" id="5ZK-B4-iXw"/>
                             <constraint firstItem="Klc-14-dde" firstAttribute="leading" secondItem="7vK-YE-vQ0" secondAttribute="leading" id="c6t-f4-olm"/>
-                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="7vK-YE-vQ0" secondAttribute="top" id="qmh-18-1ez"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="0Me-mp-gbL" secondAttribute="top" id="qmh-18-1ez"/>
                             <constraint firstItem="Klc-14-dde" firstAttribute="trailing" secondItem="7vK-YE-vQ0" secondAttribute="trailing" id="scG-bi-3LN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7vK-YE-vQ0"/>

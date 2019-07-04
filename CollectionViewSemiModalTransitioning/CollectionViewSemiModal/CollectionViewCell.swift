@@ -14,7 +14,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var tableView: UITableView!
     
-    private var number: Int!
+    var number: Int!
     private var headerHeight: CGFloat!
     
     override func awakeFromNib() {
@@ -26,6 +26,7 @@ class CollectionViewCell: UICollectionViewCell {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = UIView(frame: .zero)
+        tableView.contentInsetAdjustmentBehavior = .never
     }
     
     func configure(headerHeight: CGFloat, number: Int) {

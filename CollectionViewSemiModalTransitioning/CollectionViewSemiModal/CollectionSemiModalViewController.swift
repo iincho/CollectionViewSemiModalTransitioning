@@ -24,6 +24,8 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
+        navigationController?.isNavigationBarHidden = true
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 
         setupViews()
         
@@ -40,6 +42,8 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     }
     
     private func setupViews() {
+        self.navigationController?.navigationBar.barTintColor = UIColor(red:0.17, green:0.59, blue:0.87, alpha:1)
+        
         let collectionViewGesture = UIPanGestureRecognizer(target: self, action: #selector(collectionViewDidScroll(_:)))
         collectionViewGesture.delegate = self
         collectionView.addGestureRecognizer(collectionViewGesture)
@@ -49,11 +53,17 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         layout.prepare()
-
+        
+        // ナビゲーションバーの表示制御を行う場合、表示切り替えごとにcontentInsetが変動し、それにより表示が崩れたりCollectionViewのサイズがおかしくなってスクロールができなくなる
+        // contentInsetAdjustmentBehavior の設定をCollectionViewと、Cell内部のScrollViewで変動しないよう.neverを設定することできれいに動くようになる。
+        // また、CollectionViewの制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
+        collectionView.contentInsetAdjustmentBehavior = .never
     }
     
     @objc private func collectionViewDidScroll(_ sender: UIPanGestureRecognizer) {
         if isScrollingCollectionView { return }
+
+        /// Dismiss
         if tableViewContentOffsetY <= 0 {
             interactor.updateStateShouldStartIfNeeded()
         }
@@ -89,8 +99,19 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
     
     private func transformCell(_ cell: CollectionViewCell, baseRect: CGRect) {
-        /// Cellが拡大中は横スクロールできないようにせ
+        /// NavigationBarの表示制御
+        if let nv = navigationController {
+            if cellHeaderHeight + 100 <= abs(tableViewContentOffsetY), nv.isNavigationBarHidden {
+                title = "No. \(cell.number!)"
+                nv.setNavigationBarHidden(false, animated: true)
+            }
+            if abs(tableViewContentOffsetY) < cellHeaderHeight + 100, !nv.isNavigationBarHidden {
+                nv.setNavigationBarHidden(true, animated: true)
+            }
+        }
+        /// Cellの拡大中は横スクロールできないように
         collectionView.isScrollEnabled = tableViewContentOffsetY == 0
+
         /// CellWidthが画面幅まで拡大するのが完了する高さ
         let targetHeight = cellHeaderHeight + 100
         let verticalMovement = tableViewContentOffsetY / targetHeight
