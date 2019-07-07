@@ -9,7 +9,11 @@
 import UIKit
 
 final class CollectionSemiModalViewController: UIViewController, OverCurrentTransitionable {
-    var percentThreshold: CGFloat = 0.8
+    private var isFirst = true
+    private var dataList: [ViewData] = []
+    private var selectedIndex: Int = 0
+    
+    var percentThreshold: CGFloat = 0.3
     var interactor = OverCurrentTransitioningInteractor()
 
     private let cellHeaderHeight: CGFloat = 150
@@ -31,29 +35,35 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         
         interactor.startHandler = { [weak self] in
             self?.collectionView.visibleCells
-                .compactMap { $0 as? CollectionViewCell }
+                .compactMap { $0 as? CollectionSemiModalViewCell }
                 .forEach { $0.updateBounces(false) }
         }
         interactor.resetHandler = { [weak self] in
             self?.collectionView.visibleCells
-                .compactMap { $0 as? CollectionViewCell }
+                .compactMap { $0 as? CollectionSemiModalViewCell }
                 .forEach { $0.updateBounces(true) }
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if isFirst {
+            collectionView.scrollToItem(at: IndexPath(row: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
+            isFirst = false
+        }
+    }
+    
     private func setupViews() {
-        self.navigationController?.navigationBar.barTintColor = UIColor(red:0.17, green:0.59, blue:0.87, alpha:1)
-        
         let collectionViewGesture = UIPanGestureRecognizer(target: self, action: #selector(collectionViewDidScroll(_:)))
         collectionViewGesture.delegate = self
         collectionView.addGestureRecognizer(collectionViewGesture)
 
-        collectionView.register(cellType: CollectionViewCell.self)
+        collectionView.register(cellType: CollectionSemiModalViewCell.self)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         layout.prepare()
-        
+
         // ナビゲーションバーの表示制御を行う場合、表示切り替えごとにcontentInsetが変動し、それにより表示が崩れたりCollectionViewのサイズがおかしくなってスクロールができなくなる
         // contentInsetAdjustmentBehavior の設定をCollectionViewと、Cell内部のScrollViewで変動しないよう.neverを設定することできれいに動くようになる。
         // また、CollectionViewの制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
@@ -83,14 +93,14 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
 
 extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return dataList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(with: CollectionViewCell.self, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(with: CollectionSemiModalViewCell.self, for: indexPath)
         let baseRect = cell.frame
         cell.tag = indexPath.row
-        cell.configure(headerHeight: cellHeaderHeight, number: indexPath.row)
+        cell.configure(headerHeight: cellHeaderHeight, data: dataList[indexPath.row])
         cell.scrollViewDidScrollHandler = { [weak self] offsetY in
             self?.tableViewContentOffsetY = offsetY
             self?.transformCell(cell, baseRect: baseRect)
@@ -98,11 +108,12 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
         return cell
     }
     
-    private func transformCell(_ cell: CollectionViewCell, baseRect: CGRect) {
+    private func transformCell(_ cell: CollectionSemiModalViewCell, baseRect: CGRect) {
         /// NavigationBarの表示制御
         if let nv = navigationController {
             if cellHeaderHeight + 100 <= abs(tableViewContentOffsetY), nv.isNavigationBarHidden {
-                title = "No. \(cell.number!)"
+                title = cell.data.title
+                nv.navigationBar.barTintColor = cell.data.color
                 nv.setNavigationBarHidden(false, animated: true)
             }
             if abs(tableViewContentOffsetY) < cellHeaderHeight + 100, !nv.isNavigationBarHidden {
@@ -136,7 +147,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cell = collectionView.dequeueReusableCell(with: CollectionViewCell.self, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(with: CollectionSemiModalViewCell.self, for: indexPath)
         cell.scrollToTop()
     }
 
@@ -183,9 +194,11 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
 }
 
 extension CollectionSemiModalViewController {
-    static func make() -> CollectionSemiModalViewController {
+    static func make(dataList: [ViewData], selectedIndex: Int) -> CollectionSemiModalViewController {
         let sb = UIStoryboard(name: "CollectionSemiModalViewController", bundle: nil)
         let vc = sb.instantiateInitialViewController() as! CollectionSemiModalViewController
+        vc.dataList = dataList
+        vc.selectedIndex = selectedIndex
         return vc
     }
 }

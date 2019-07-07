@@ -8,13 +8,13 @@
 
 import UIKit
 
-class CollectionViewCell: UICollectionViewCell {
+class CollectionSemiModalViewCell: UICollectionViewCell {
 
     var scrollViewDidScrollHandler: ((_ offsetY: CGFloat) -> Void)?
     
     @IBOutlet weak var tableView: UITableView!
     
-    var number: Int!
+    var data: ViewData!
     private var headerHeight: CGFloat!
     
     override func awakeFromNib() {
@@ -25,12 +25,15 @@ class CollectionViewCell: UICollectionViewCell {
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44
         tableView.tableHeaderView = UIView(frame: .zero)
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.register(cellType: TableViewTitleCell.self)
     }
     
-    func configure(headerHeight: CGFloat, number: Int) {
-        self.number = number
+    func configure(headerHeight: CGFloat, data: ViewData) {
+        self.data = data
         self.headerHeight = headerHeight
         tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: headerHeight)
         tableView.reloadData()
@@ -45,7 +48,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension CollectionViewCell: UITableViewDelegate, UITableViewDataSource {
+extension CollectionSemiModalViewCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 30
     }
@@ -55,19 +58,23 @@ extension CollectionViewCell: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
-        
         if indexPath.row == 0 {
-            cell.layer.cornerRadius = 10
-            cell.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-            cell.clipsToBounds = true
-            cell.textLabel?.text = "No. \(number!)"
+            let cell = tableView.dequeueReusableCell(with: TableViewTitleCell.self, for: indexPath)
+            cell.configure(data: data)
+            return cell
         } else {
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
             cell.textLabel?.text = String(indexPath.row)
+            return cell
         }
-        
-        
-        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 360
+        } else {
+            return 44
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

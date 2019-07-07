@@ -20,7 +20,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
         let containerView = transitionContext.containerView
         
         let selectedIndexPath = fromVC.collectionView.indexPathsForSelectedItems!.first!
-        let cell = fromVC.collectionView.cellForItem(at: selectedIndexPath) as! CollectionViewCell
+        let cell = fromVC.collectionView.cellForItem(at: selectedIndexPath) as! CollectionSemiModalViewCell
         
         let animationView = cell.tableView!
         animationView.frame = containerView.convert(cell.contentView.frame, from: cell.contentView.superview)

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9826DD1122D1CE76005ADAEF /* TableViewTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */; };
+		9826DD1222D1CE76005ADAEF /* TableViewTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */; };
 		985319572211CC5800378DA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985319562211CC5800378DA5 /* AppDelegate.swift */; };
 		985319592211CC5800378DA5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985319582211CC5800378DA5 /* ViewController.swift */; };
 		9853195C2211CC5800378DA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9853195A2211CC5800378DA5 /* Main.storyboard */; };
@@ -20,8 +22,8 @@
 		98E3C5C12217CE3C00DDDD72 /* CollectionSemiModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */; };
 		98E3C5C32217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */; };
 		98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5E6223382A700DDDD72 /* Extensions.swift */; };
-		98E3C5EC2233890C00DDDD72 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */; };
-		98E3C5ED2233890C00DDDD72 /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */; };
+		98E3C5EC2233890C00DDDD72 /* CollectionSemiModalViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EA2233890C00DDDD72 /* CollectionSemiModalViewCell.swift */; };
+		98E3C5ED2233890C00DDDD72 /* CollectionSemiModalViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */; };
 		98E3C5EF22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */; };
 		98E3C5F1223932A400DDDD72 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5F0223932A400DDDD72 /* DetailViewController.swift */; };
 		98E3C5F3223932B300DDDD72 /* DetailViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTitleCell.swift; sourceTree = "<group>"; };
+		9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewTitleCell.xib; sourceTree = "<group>"; };
 		985319532211CC5800378DA5 /* CollectionViewSemiModalTransitioning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionViewSemiModalTransitioning.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		985319562211CC5800378DA5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		985319582211CC5800378DA5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -44,8 +48,8 @@
 		98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSemiModalViewController.swift; sourceTree = "<group>"; };
 		98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CollectionSemiModalViewController.storyboard; sourceTree = "<group>"; };
 		98E3C5E6223382A700DDDD72 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
-		98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell.xib; sourceTree = "<group>"; };
+		98E3C5EA2233890C00DDDD72 /* CollectionSemiModalViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSemiModalViewCell.swift; sourceTree = "<group>"; };
+		98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionSemiModalViewCell.xib; sourceTree = "<group>"; };
 		98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewPresentAnimator.swift; sourceTree = "<group>"; };
 		98E3C5F0223932A400DDDD72 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailViewController.storyboard; sourceTree = "<group>"; };
@@ -103,9 +107,11 @@
 			children = (
 				98E3C5C02217CE3C00DDDD72 /* CollectionSemiModalViewController.swift */,
 				98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */,
-				98E3C5EA2233890C00DDDD72 /* CollectionViewCell.swift */,
-				98E3C5EB2233890C00DDDD72 /* CollectionViewCell.xib */,
+				98E3C5EA2233890C00DDDD72 /* CollectionSemiModalViewCell.swift */,
+				98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */,
 				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
+				9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */,
+				9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */,
 			);
 			path = CollectionViewSemiModal;
 			sourceTree = "<group>";
@@ -184,8 +190,9 @@
 				98E3C5C32217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard in Resources */,
 				9853195E2211CC5B00378DA5 /* Assets.xcassets in Resources */,
 				9853195C2211CC5800378DA5 /* Main.storyboard in Resources */,
+				9826DD1222D1CE76005ADAEF /* TableViewTitleCell.xib in Resources */,
 				98E3C5F3223932B300DDDD72 /* DetailViewController.storyboard in Resources */,
-				98E3C5ED2233890C00DDDD72 /* CollectionViewCell.xib in Resources */,
+				98E3C5ED2233890C00DDDD72 /* CollectionSemiModalViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98E3C5EC2233890C00DDDD72 /* CollectionViewCell.swift in Sources */,
+				98E3C5EC2233890C00DDDD72 /* CollectionSemiModalViewCell.swift in Sources */,
 				98E3C5EF22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift in Sources */,
 				9878E9C122BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift in Sources */,
 				9878E9BF22BE028B00E7C37A /* OverCurrentTransitionable.swift in Sources */,
@@ -204,6 +211,7 @@
 				985319592211CC5800378DA5 /* ViewController.swift in Sources */,
 				9878E9C322BE06B600E7C37A /* OverCurrentTransitioning.swift in Sources */,
 				9878E9BE22BE028B00E7C37A /* ModalPresentationController.swift in Sources */,
+				9826DD1122D1CE76005ADAEF /* TableViewTitleCell.swift in Sources */,
 				9878E9C022BE028B00E7C37A /* DismissAnimator.swift in Sources */,
 				985319572211CC5800378DA5 /* AppDelegate.swift in Sources */,
 				98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */,
