@@ -9,7 +9,11 @@
 import UIKit
 
 class CollectionSemiModalViewCell: UICollectionViewCell {
-
+    var titleColorView: UIView? {
+        guard let titleCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? TableViewTitleCell else { return nil }
+        return titleCell.colorView
+    }
+    
     var scrollViewDidScrollHandler: ((_ offsetY: CGFloat) -> Void)?
     
     @IBOutlet weak var tableView: UITableView!
@@ -37,6 +41,10 @@ class CollectionSemiModalViewCell: UICollectionViewCell {
         self.headerHeight = headerHeight
         tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: headerHeight)
         tableView.reloadData()
+    }
+    
+    func switchTitleColorView(isClear: Bool) {
+        titleColorView?.backgroundColor = isClear ? .clear : data.color
     }
     
     func scrollToTop() {

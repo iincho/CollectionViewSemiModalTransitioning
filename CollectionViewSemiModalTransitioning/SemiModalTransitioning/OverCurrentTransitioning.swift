@@ -15,6 +15,10 @@ final class OverCurrentTransitioningDelegate: NSObject, UIViewControllerTransiti
         return ModalPresentationController(presentedViewController: presented, presenting: presenting)
     }
     
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return CollectionViewPresentAnimator(isPresent: true)
+    }
+
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return DismissAnimator()
     }

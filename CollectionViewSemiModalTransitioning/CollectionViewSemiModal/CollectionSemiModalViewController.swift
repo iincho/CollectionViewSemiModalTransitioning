@@ -9,9 +9,9 @@
 import UIKit
 
 final class CollectionSemiModalViewController: UIViewController, OverCurrentTransitionable {
+    var selectedIndex: Int = 0
     private var isFirst = true
     private var dataList: [ViewData] = []
-    private var selectedIndex: Int = 0
     
     var percentThreshold: CGFloat = 0.3
     var interactor = OverCurrentTransitioningInteractor()
@@ -52,7 +52,7 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
             isFirst = false
         }
     }
-    
+
     private func setupViews() {
         let collectionViewGesture = UIPanGestureRecognizer(target: self, action: #selector(collectionViewDidScroll(_:)))
         collectionViewGesture.delegate = self

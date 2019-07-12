@@ -25,8 +25,6 @@
 		98E3C5EC2233890C00DDDD72 /* CollectionSemiModalViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EA2233890C00DDDD72 /* CollectionSemiModalViewCell.swift */; };
 		98E3C5ED2233890C00DDDD72 /* CollectionSemiModalViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */; };
 		98E3C5EF22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */; };
-		98E3C5F1223932A400DDDD72 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5F0223932A400DDDD72 /* DetailViewController.swift */; };
-		98E3C5F3223932B300DDDD72 /* DetailViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */; };
 		98E3C5F9224376ED00DDDD72 /* CustomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,8 +49,6 @@
 		98E3C5EA2233890C00DDDD72 /* CollectionSemiModalViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSemiModalViewCell.swift; sourceTree = "<group>"; };
 		98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionSemiModalViewCell.xib; sourceTree = "<group>"; };
 		98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewPresentAnimator.swift; sourceTree = "<group>"; };
-		98E3C5F0223932A400DDDD72 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
-		98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailViewController.storyboard; sourceTree = "<group>"; };
 		98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,8 +91,6 @@
 				9853195F2211CC5B00378DA5 /* LaunchScreen.storyboard */,
 				985319622211CC5B00378DA5 /* Info.plist */,
 				98E3C5E6223382A700DDDD72 /* Extensions.swift */,
-				98E3C5F0223932A400DDDD72 /* DetailViewController.swift */,
-				98E3C5F2223932B300DDDD72 /* DetailViewController.storyboard */,
 				98E3C5F8224376ED00DDDD72 /* CustomTransition.swift */,
 			);
 			path = CollectionViewSemiModalTransitioning;
@@ -109,7 +103,6 @@
 				98E3C5C22217CE7C00DDDD72 /* CollectionSemiModalViewController.storyboard */,
 				98E3C5EA2233890C00DDDD72 /* CollectionSemiModalViewCell.swift */,
 				98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */,
-				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
 				9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */,
 				9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */,
 			);
@@ -120,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				9878E9BC22BE028B00E7C37A /* DismissAnimator.swift */,
+				98E3C5EE22392DBA00DDDD72 /* CollectionViewPresentAnimator.swift */,
 				9878E9BA22BE028B00E7C37A /* ModalPresentationController.swift */,
 				9878E9BB22BE028B00E7C37A /* OverCurrentTransitionable.swift */,
 				9878E9BD22BE028B00E7C37A /* OverCurrentTransitioningInteractor.swift */,
@@ -191,7 +185,6 @@
 				9853195E2211CC5B00378DA5 /* Assets.xcassets in Resources */,
 				9853195C2211CC5800378DA5 /* Main.storyboard in Resources */,
 				9826DD1222D1CE76005ADAEF /* TableViewTitleCell.xib in Resources */,
-				98E3C5F3223932B300DDDD72 /* DetailViewController.storyboard in Resources */,
 				98E3C5ED2233890C00DDDD72 /* CollectionSemiModalViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,7 +208,6 @@
 				9878E9C022BE028B00E7C37A /* DismissAnimator.swift in Sources */,
 				985319572211CC5800378DA5 /* AppDelegate.swift in Sources */,
 				98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */,
-				98E3C5F1223932A400DDDD72 /* DetailViewController.swift in Sources */,
 				98E3C5F9224376ED00DDDD72 /* CustomTransition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
