@@ -9,6 +9,31 @@
 import UIKit
 
 final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    struct FromCellData {
+        enum TargetType {
+            case prev
+            case target
+            case next
+        }
+        
+        let frame: CGRect
+        let tag: Int
+        let color: UIColor?
+        
+        init(cell: UICollectionViewCell, targetConvertFrame: CGRect, targetType: TargetType, cellSpacing: CGFloat) {
+            switch targetType {
+            case .target:
+                frame = targetConvertFrame
+            case .prev:
+                frame = targetConvertFrame.offsetBy(dx: -targetConvertFrame.width - cellSpacing, dy: 0)
+            case .next:
+                frame = targetConvertFrame.offsetBy(dx: targetConvertFrame.width + cellSpacing, dy: 0)
+            }
+            tag = cell.tag
+            color = cell.contentView.backgroundColor
+        }
+    }
+    
     let isPresent: Bool
     
     init(isPresent: Bool) {
@@ -17,7 +42,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
+        return 0.4
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -30,8 +55,9 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
     
     private func presentTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let fromVC = transitionContext.viewController(forKey: .from) as! ViewController
-        let nv = transitionContext.viewController(forKey: .to) as! UINavigationController
-        let toVC = nv.viewControllers.first as! CollectionSemiModalViewController
+        let toNv = transitionContext.viewController(forKey: .to) as! UINavigationController
+        let toVC = toNv.viewControllers.first as! CollectionSemiModalViewController
+        let finalToVCFrame = toVC.view.frame
         let containerView = transitionContext.containerView
         
         toVC.beginAppearanceTransition(true, animated: true)
@@ -39,24 +65,42 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
         
         let selectedIndexPath = fromVC.collectionView.indexPathsForSelectedItems!.first!
 
-        // 遷移元Cell関連
-        let fromCells = fromVC.collectionView.visibleCells.compactMap { cell -> UICollectionViewCell? in
-            return cell.tag == selectedIndexPath.row - 1 ||
-                cell.tag == selectedIndexPath.row ||
-                cell.tag == selectedIndexPath.row + 1 ? cell : nil }.sorted(by: { $0.tag < $1.tag })
-        let fromCellsFramesWithTagColor = fromCells.map {  fromCell -> (frame: CGRect, tag: Int, color: UIColor?) in
-            let frame = fromCell.convert(fromCell.bounds, to: fromVC.view)
-            return (frame, fromCell.tag, fromCell.contentView.backgroundColor)
-        }
-        
-        let fromTargetCell = fromVC.collectionView.cellForItem(at: selectedIndexPath)! as UICollectionViewCell
-        let finalToVCFrame = toVC.view.frame
-        
-        // 通常、このタイミングで取得できるvisibleCellsは先頭2つのCellとなる。本来はタップしたCell＋前後のCellがほしい。
+        // 通常、このタイミングで取得できる[遷移先]のvisibleCellsは先頭2つのCellとなる。本来はタップしたCell＋前後のCellがほしい。
         // resizableSnapshotView(from: afterScreenUpdates: withCapInsets:)を使い、afterScreenUpdates: trueとしてスナップショットを取得することで、
         // 描画完了後のViewを生成するとともに、目的のCellがvisibleCellsに格納されるようになる。
-        
         if let _ = toVC.view.resizableSnapshotView(from: finalToVCFrame, afterScreenUpdates: true, withCapInsets: .zero) {
+        
+            // 遷移元Cell関連
+            // 遷移元Cellの座標をもとにアニメーション開始位置を決める。
+            // 今回のアニメーションでは、遷移後の横並びに合わせ、アニメーション開始位置はタップされたCellの両脇を開始位置とする。
+            // そのため、左右のセルが改行の関係で上下に位置する場合を考慮し、タップされたCellをもとにCGRectを生成する。
+            // なお、遷移元のCell位置関係の取得はCollectionViewが一つであることを想定した実装であるため、複数ある場合はそれを考慮した実装が必要になる。
+            
+            // 遷移元Cellの生成 TargetCellの前後の存在有無を確認した上でCellを生成
+            // cellForItemでは取得出来ない場合(画面外にあるなど)はUICollectionViewCellを生成している。
+            // Frame指定する際、前後のCellはCollectionViewの改行を考慮し、TargetCellの左右に並ぶよう調整している
+            let targetCell = fromVC.collectionView.cellForItem(at: selectedIndexPath)!
+            let targetConvertFrame = targetCell.convert(targetCell.bounds, to: fromVC.view)
+            let cellSpacing = (fromVC.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0
+            
+            var fromCellDataList: [FromCellData] = []
+            // PrevCell
+            let prevTag = targetCell.tag - 1
+            if 0 <= prevTag {
+                let prevCell = fromVC.collectionView.cellForItem(at: IndexPath(row: prevTag, section: selectedIndexPath.section)) ?? UICollectionViewCell()
+                prevCell.tag = prevTag
+                fromCellDataList.append(FromCellData(cell: prevCell, targetConvertFrame: targetConvertFrame, targetType: .prev, cellSpacing: cellSpacing))
+            }
+            // TargetCell
+            fromCellDataList.append(FromCellData(cell: targetCell, targetConvertFrame: targetConvertFrame, targetType: .target, cellSpacing: cellSpacing))
+            // NextCell
+            let nextTag = targetCell.tag + 1
+            if nextTag < fromVC.collectionView.numberOfItems(inSection: selectedIndexPath.section) {
+                let nextCell = fromVC.collectionView.cellForItem(at: IndexPath(row: nextTag, section: selectedIndexPath.section)) ?? UICollectionViewCell()
+                nextCell.tag = nextTag
+                fromCellDataList.append(FromCellData(cell: nextCell, targetConvertFrame: targetConvertFrame, targetType: .next, cellSpacing: cellSpacing))
+            }
+            
             // 遷移先View関連
             let toCells = toVC.collectionView.visibleCells.compactMap { cell -> CollectionSemiModalViewCell? in
                 guard let castCell = cell as? CollectionSemiModalViewCell else { return nil }
@@ -77,11 +121,11 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
             let animationToCells = toCells.map {  toCell -> UIView in
                 let snapshotCell = toCell.resizableSnapshotView(from: toCell.bounds, afterScreenUpdates: true, withCapInsets: .zero) ?? UIView()
                 snapshotCell.tag = toCell.tag
-                snapshotCell.frame = fromCells.first(where: {$0.tag == toCell.tag})?.frame ?? .zero
+                snapshotCell.frame = fromCellDataList.first(where: {$0.tag == toCell.tag})?.frame ?? .zero
                 snapshotCell.alpha = 0
                 return snapshotCell
             }
-            let animationColorViews = fromCellsFramesWithTagColor.map { tuple -> UIView in
+            let animationColorViews = fromCellDataList.map { tuple -> UIView in
                 let view = UIView(frame: tuple.frame)
                 view.tag = tuple.tag
                 view.backgroundColor = tuple.color
@@ -94,7 +138,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
             animationToCells.forEach { containerView.addSubview($0) }
             animationColorViews.forEach { containerView.addSubview($0) }
             
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options:[.curveEaseInOut], animations: {
                 animationToCells.forEach { animationCell in
                     animationCell.frame = finalToCellsFramesWithTag.first(where: { $0.tag == animationCell.tag })?.frame ?? .zero
                     animationCell.alpha = 1
@@ -114,7 +158,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
             // アニメーションさせる遷移先のSnapshotが取得出来なかった場合
             containerView.addSubview(toVC.view)
             toVC.view.frame = CGRect(origin: CGPoint(x: 0, y: finalToVCFrame.size.height), size: finalToVCFrame.size)
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options: [.curveEaseOut], animations: {
                 toVC.view.frame = finalToVCFrame
             }, completion: { _ in
                 transitionContext.completeTransition(true)

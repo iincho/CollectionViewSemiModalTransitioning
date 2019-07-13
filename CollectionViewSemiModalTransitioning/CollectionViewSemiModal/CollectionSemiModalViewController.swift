@@ -16,7 +16,7 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     var percentThreshold: CGFloat = 0.3
     var interactor = OverCurrentTransitioningInteractor()
 
-    private let cellHeaderHeight: CGFloat = 150
+    private let cellHeaderHeight: CGFloat = 72
     private var tableViewContentOffsetY: CGFloat = 0
     private var isScrollingCollectionView = false
     
