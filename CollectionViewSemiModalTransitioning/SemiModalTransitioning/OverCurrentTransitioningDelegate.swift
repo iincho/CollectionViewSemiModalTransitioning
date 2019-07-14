@@ -9,6 +9,8 @@
 import UIKit
 
 final class OverCurrentTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+    var isInteractiveDismissal: Bool = true
+    
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return ModalPresentationController(presentedViewController: presented, presenting: presenting)
     }
@@ -18,6 +20,6 @@ final class OverCurrentTransitioningDelegate: NSObject, UIViewControllerTransiti
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return CollectionViewPresentAnimator(isPresent: false)
+        return isInteractiveDismissal ? CollectionViewPresentAnimator(isPresent: false) : nil
     }    
 }

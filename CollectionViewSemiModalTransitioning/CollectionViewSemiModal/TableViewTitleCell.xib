@@ -19,6 +19,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="358.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gZ4-CO-9zj">
+                        <rect key="frame" x="8" y="-8" width="30" height="38"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                        <state key="normal" title="x">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <connections>
+                            <action selector="didTapClose:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yBS-z7-YHQ"/>
+                        </connections>
+                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yellow" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MgG-El-RbP">
                         <rect key="frame" x="137.5" y="5" width="45" height="27.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -51,7 +61,9 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="J0e-f0-JT8" secondAttribute="trailing" id="7M7-rk-uah"/>
                     <constraint firstItem="MgG-El-RbP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="91H-29-zy3"/>
+                    <constraint firstItem="gZ4-CO-9zj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="-8" id="94D-s5-MTI"/>
                     <constraint firstItem="MgG-El-RbP" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="RAd-Cs-Q75"/>
+                    <constraint firstItem="gZ4-CO-9zj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="TdG-cA-0An"/>
                     <constraint firstAttribute="bottom" secondItem="J0e-f0-JT8" secondAttribute="bottom" id="W0e-lI-eba"/>
                     <constraint firstItem="J0e-f0-JT8" firstAttribute="top" secondItem="MgG-El-RbP" secondAttribute="bottom" constant="6" id="o4b-qX-Tl1"/>
                     <constraint firstItem="J0e-f0-JT8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="wLC-rY-zPS"/>

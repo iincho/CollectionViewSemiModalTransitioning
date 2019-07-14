@@ -18,6 +18,8 @@ class CollectionSemiModalViewCell: UICollectionViewCell {
     
     var tableViewDidSelectHandler: ((_ row: Int) -> Void)?
     
+    var closeTapHandler: (() -> Void)?
+    
     @IBOutlet weak var tableView: UITableView!
     
     var data: ViewData!
@@ -72,6 +74,7 @@ extension CollectionSemiModalViewCell: UITableViewDelegate, UITableViewDataSourc
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(with: TableViewTitleCell.self, for: indexPath)
             cell.configure(data: data)
+            cell.closeTapHandler = closeTapHandler
             return cell
         } else {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")

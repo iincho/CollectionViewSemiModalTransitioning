@@ -9,10 +9,13 @@
 import UIKit
 
 class TableViewTitleCell: UITableViewCell {
+    
+    var closeTapHandler: (() -> Void)?
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var baseView: UIView!
     @IBOutlet weak var colorView: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setupViews()
@@ -31,4 +34,7 @@ class TableViewTitleCell: UITableViewCell {
         colorView.backgroundColor = data.color
     }
     
+    @IBAction func didTapClose(_ sender: Any) {
+        closeTapHandler?()
+    }
 }

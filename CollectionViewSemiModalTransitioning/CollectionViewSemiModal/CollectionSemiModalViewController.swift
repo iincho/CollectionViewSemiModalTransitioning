@@ -28,8 +28,11 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
+        
         navigationController?.isNavigationBarHidden = true
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
+        navigationItem.leftBarButtonItem?.tintColor = .white
 
         setupViews()
         
@@ -42,7 +45,7 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
             self?.collectionView.frame.origin = CGPoint(x: 0, y: offsetY)
         }
         interactor.finishHandler = { [weak self] in
-            self?.dismiss(animated: true, completion: nil)
+            self?.dismiss(isInteractive: true)
         }
         interactor.resetHandler = { [weak self] in
             UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
@@ -77,6 +80,17 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         // contentInsetAdjustmentBehavior の設定をCollectionViewと、Cell内部のScrollViewで変動しないよう.neverを設定することできれいに動くようになる。
         // また、CollectionViewの制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
         collectionView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    @objc private func didTapDone() {
+        dismiss(isInteractive: false)
+    }
+    
+    private func dismiss(isInteractive: Bool) {
+        if let delegate = navigationController?.transitioningDelegate as? OverCurrentTransitioningDelegate {
+            delegate.isInteractiveDismissal = isInteractive
+        }
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     @objc private func collectionViewDidScroll(_ sender: UIPanGestureRecognizer) {
@@ -118,6 +132,9 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
         }
         cell.tableViewDidSelectHandler = { [weak self] row in
             self?.transitionDetail(data: data, row: row)
+        }
+        cell.closeTapHandler = { [weak self] in
+            self?.dismiss(isInteractive: true)
         }
         return cell
     }

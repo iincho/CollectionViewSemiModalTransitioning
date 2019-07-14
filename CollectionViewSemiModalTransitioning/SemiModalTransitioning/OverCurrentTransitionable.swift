@@ -26,7 +26,6 @@ extension OverCurrentTransitionable {
                 interactor.reset()
                 return
             }
-            break
         case .none:
             return
         }
