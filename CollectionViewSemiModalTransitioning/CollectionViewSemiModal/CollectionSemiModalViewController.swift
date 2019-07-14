@@ -202,12 +202,15 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
                 scrollView.contentOffset = CGPoint(x: toValue, y: 0)
                 scrollView.layoutIfNeeded()
-            }, completion: nil)
+            }, completion: { _ in
+                self.selectedIndex = snapToIndex
+            })
 
         } else {
             // This is a much better way to scroll to a cell:
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
             layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            selectedIndex = indexOfMajorCell
         }
     }
 }

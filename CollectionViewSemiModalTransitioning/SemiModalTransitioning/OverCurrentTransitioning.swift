@@ -20,7 +20,7 @@ final class OverCurrentTransitioningDelegate: NSObject, UIViewControllerTransiti
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return DismissAnimator()
+        return CollectionViewPresentAnimator(isPresent: false)
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

@@ -9,7 +9,7 @@
 import UIKit
 
 final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-    struct FromCellData {
+    struct AnimationCellData {
         enum TargetType {
             case prev
             case target
@@ -53,6 +53,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
         }
     }
     
+    /// Present Transition Animator
     private func presentTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let fromVC = transitionContext.viewController(forKey: .from) as! ViewController
         let toNC = transitionContext.viewController(forKey: .to) as! UINavigationController
@@ -79,22 +80,22 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
             let targetConvertFrame = targetCell.convert(targetCell.bounds, to: fromVC.view)
             let cellSpacing = (fromVC.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0
             
-            var fromCellDataList: [FromCellData] = []
+            var fromCellDataList: [AnimationCellData] = []
             // PrevCell
             let prevTag = targetCell.tag - 1
             if 0 <= prevTag {
                 let prevCell = fromVC.collectionView.cellForItem(at: IndexPath(row: prevTag, section: selectedIndexPath.section)) ?? UICollectionViewCell()
                 prevCell.tag = prevTag
-                fromCellDataList.append(FromCellData(cell: prevCell, targetConvertFrame: targetConvertFrame, targetType: .prev, cellSpacing: cellSpacing))
+                fromCellDataList.append(AnimationCellData(cell: prevCell, targetConvertFrame: targetConvertFrame, targetType: .prev, cellSpacing: cellSpacing))
             }
             // TargetCell
-            fromCellDataList.append(FromCellData(cell: targetCell, targetConvertFrame: targetConvertFrame, targetType: .target, cellSpacing: cellSpacing))
+            fromCellDataList.append(AnimationCellData(cell: targetCell, targetConvertFrame: targetConvertFrame, targetType: .target, cellSpacing: cellSpacing))
             // NextCell
             let nextTag = targetCell.tag + 1
             if nextTag < fromVC.collectionView.numberOfItems(inSection: selectedIndexPath.section) {
                 let nextCell = fromVC.collectionView.cellForItem(at: IndexPath(row: nextTag, section: selectedIndexPath.section)) ?? UICollectionViewCell()
                 nextCell.tag = nextTag
-                fromCellDataList.append(FromCellData(cell: nextCell, targetConvertFrame: targetConvertFrame, targetType: .next, cellSpacing: cellSpacing))
+                fromCellDataList.append(AnimationCellData(cell: nextCell, targetConvertFrame: targetConvertFrame, targetType: .next, cellSpacing: cellSpacing))
             }
             
             // 遷移先View関連
@@ -143,7 +144,6 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
                 animationColorViews.forEach { animationColorView in
                     animationColorView.frame = finalColorViewsFramesWithTag.first(where: { $0.tag == animationColorView.tag })?.frame ?? .zero
                 }
-                
             }, completion: { _ in
                 toNC.view.isHidden = false
                 toCells.forEach { $0.switchTitleColorView(isClear: false) }
@@ -163,8 +163,84 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
         }
     }
 
+    // Dismissal Transition Animator
     private func dismissalTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let fromNC = transitionContext.viewController(forKey: .from) as! UINavigationController
+        let fromVC = fromNC.viewControllers.first as! CollectionSemiModalViewController
+        let toVC = transitionContext.viewController(forKey: .to) as! ViewController
+        let containerView = transitionContext.containerView
+
+        // 遷移元Cell関連
+        let fromCells = fromVC.collectionView.visibleCells.compactMap { cell -> CollectionSemiModalViewCell? in
+            guard let castCell = cell as? CollectionSemiModalViewCell else { return nil }
+            castCell.switchTitleColorView(isClear: true)
+            return castCell
+            }.sorted(by:{ $0.tag < $1.tag })
+
+        // 遷移先Cell関連
+        let targetToIndexPath = IndexPath(row: fromVC.selectedIndex, section: 0)
+        if toVC.collectionView.cellForItem(at: targetToIndexPath) == nil {
+            // 遷移先対象Cellが画面外にいる場合、画面内にスクロールさせる。更にスナップショットをとることでcellForItemメソッドで参照可能な状態にしている。
+            toVC.collectionView.scrollToItem(at: targetToIndexPath, at: .centeredVertically, animated: false)
+            toVC.view.snapshotView(afterScreenUpdates: true)
+        }
+        let targetToCell = toVC.collectionView.cellForItem(at: targetToIndexPath)!
+        let targetConvertFrame = targetToCell.convert(targetToCell.bounds, to: toVC.view)
+        let cellSpacing = (fromVC.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0
+        var toCellDataList: [AnimationCellData] = []
+        // PrevCell
+        let prevTag = targetToCell.tag - 1
+        if 0 <= prevTag {
+            let prevCell = toVC.collectionView.cellForItem(at: IndexPath(row: prevTag, section: targetToIndexPath.section)) ?? UICollectionViewCell()
+            prevCell.tag = prevTag
+            toCellDataList.append(AnimationCellData(cell: prevCell, targetConvertFrame: targetConvertFrame, targetType: .prev, cellSpacing: cellSpacing))
+        }
+        // TargetCell
+        toCellDataList.append(AnimationCellData(cell: targetToCell, targetConvertFrame: targetConvertFrame, targetType: .target, cellSpacing: cellSpacing))
+        // NextCell
+        let nextTag = targetToCell.tag + 1
+        if nextTag < toVC.collectionView.numberOfItems(inSection: targetToIndexPath.section) {
+            let nextCell = toVC.collectionView.cellForItem(at: IndexPath(row: nextTag, section: targetToIndexPath.section)) ?? UICollectionViewCell()
+            nextCell.tag = nextTag
+            toCellDataList.append(AnimationCellData(cell: nextCell, targetConvertFrame: targetConvertFrame, targetType: .next, cellSpacing: cellSpacing))
+        }
         
+        // AnimationView関連（fromVCからSnapshotを作成）
+        let animationColorViews = toCellDataList.map { toCellData -> UIView in
+            let view = fromCells.first(where: {$0.tag == toCellData.tag})?.titleColorView ?? UIView()
+            let snapshotView = view.snapshotView(afterScreenUpdates: true) ?? UIView()
+            snapshotView.frame = view.convert(view.bounds, to: toVC.view)
+            snapshotView.tag = toCellData.tag
+            snapshotView.backgroundColor = toCellData.color
+            return snapshotView
+        }
+        let animationFromCells = toCellDataList.map { toCellData -> UIView in
+            let cell = fromCells.first(where: {$0.tag == toCellData.tag}) ?? UIView()
+            let snapshotCell = cell.snapshotView(afterScreenUpdates: true) ?? UIView()
+            snapshotCell.frame = cell.convert(cell.bounds, to: toVC.view)
+            snapshotCell.tag = cell.tag
+            return snapshotCell
+        }
+        
+        fromVC.view.isHidden = true
+        animationFromCells.forEach { containerView.addSubview($0) }
+        animationColorViews.forEach { containerView.addSubview($0) }
+        
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0, options:[.curveEaseInOut], animations: {
+            animationFromCells.forEach { animationCell in
+                animationCell.frame = toCellDataList.first(where: { $0.tag == animationCell.tag })?.frame ?? .zero
+                animationCell.alpha = 0
+            }
+            animationColorViews.forEach { animationColorView in
+                animationColorView.frame = toCellDataList.first(where: { $0.tag == animationColorView.tag })?.frame ?? .zero
+            }
+        }, completion: { _ in
+            fromVC.view.isHidden = false
+            fromCells.forEach { $0.switchTitleColorView(isClear: false) }
+            animationFromCells.forEach { $0.removeFromSuperview() }
+            animationColorViews.forEach { $0.removeFromSuperview() }
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+        })
     }
 }
 
