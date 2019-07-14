@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		982355DE22DB7171009C5FD5 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982355DD22DB7171009C5FD5 /* DetailViewController.swift */; };
 		9826DD1122D1CE76005ADAEF /* TableViewTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */; };
 		9826DD1222D1CE76005ADAEF /* TableViewTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */; };
 		985319572211CC5800378DA5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985319562211CC5800378DA5 /* AppDelegate.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		982355DD22DB7171009C5FD5 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTitleCell.swift; sourceTree = "<group>"; };
 		9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewTitleCell.xib; sourceTree = "<group>"; };
 		985319532211CC5800378DA5 /* CollectionViewSemiModalTransitioning.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionViewSemiModalTransitioning.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,7 @@
 				98E3C5EB2233890C00DDDD72 /* CollectionSemiModalViewCell.xib */,
 				9826DD0F22D1CE76005ADAEF /* TableViewTitleCell.swift */,
 				9826DD1022D1CE76005ADAEF /* TableViewTitleCell.xib */,
+				982355DD22DB7171009C5FD5 /* DetailViewController.swift */,
 			);
 			path = CollectionViewSemiModal;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				985319572211CC5800378DA5 /* AppDelegate.swift in Sources */,
 				98E3C5E7223382A700DDDD72 /* Extensions.swift in Sources */,
 				98E3C5F9224376ED00DDDD72 /* CustomTransition.swift in Sources */,
+				982355DE22DB7171009C5FD5 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

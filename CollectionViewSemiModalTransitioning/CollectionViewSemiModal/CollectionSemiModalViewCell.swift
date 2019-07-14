@@ -16,6 +16,8 @@ class CollectionSemiModalViewCell: UICollectionViewCell {
     
     var scrollViewDidScrollHandler: ((_ offsetY: CGFloat) -> Void)?
     
+    var tableViewDidSelectHandler: ((_ row: Int) -> Void)?
+    
     @IBOutlet weak var tableView: UITableView!
     
     var data: ViewData!
@@ -56,6 +58,7 @@ class CollectionSemiModalViewCell: UICollectionViewCell {
     }
 }
 
+// MARK: - UITableViewDelegate, UITableViewDataSource Methods
 extension CollectionSemiModalViewCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 30
@@ -72,6 +75,7 @@ extension CollectionSemiModalViewCell: UITableViewDelegate, UITableViewDataSourc
             return cell
         } else {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
+            cell.selectionStyle = .none
             cell.textLabel?.text = String(indexPath.row)
             return cell
         }
@@ -83,6 +87,10 @@ extension CollectionSemiModalViewCell: UITableViewDelegate, UITableViewDataSourc
         } else {
             return 44
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableViewDidSelectHandler?(indexPath.row)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

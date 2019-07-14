@@ -91,6 +91,7 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     }
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout Methods
 extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataList.count
@@ -99,27 +100,45 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(with: CollectionSemiModalViewCell.self, for: indexPath)
         let baseRect = cell.frame
+        let data = dataList[indexPath.row]
         cell.tag = indexPath.row
-        cell.configure(headerHeight: cellHeaderHeight, data: dataList[indexPath.row])
+        cell.configure(headerHeight: cellHeaderHeight, data: data)
         cell.scrollViewDidScrollHandler = { [weak self] offsetY in
             self?.tableViewContentOffsetY = offsetY
             self?.transformCell(cell, baseRect: baseRect)
         }
+        cell.tableViewDidSelectHandler = { [weak self] row in
+            self?.transitionDetail(data: data, row: row)
+        }
         return cell
     }
     
-    private func transformCell(_ cell: CollectionSemiModalViewCell, baseRect: CGRect) {
-        /// NavigationBarの表示制御
+    private func transitionDetail(data: ViewData, row: Int) {
+        let vc = DetailViewController()
+        vc.data = data
+        vc.row = row
+        vc.popActonHandler = { [weak self] in
+            self?.switchDisplayNavigationBar(data: data)
+        }        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// NavigationBarの表示制御
+    private func switchDisplayNavigationBar(data: ViewData) {
         if let nv = navigationController {
             if cellHeaderHeight + 100 <= abs(tableViewContentOffsetY), nv.isNavigationBarHidden {
-                title = cell.data.title
-                nv.navigationBar.barTintColor = cell.data.color
+                title = data.title
+                nv.navigationBar.barTintColor = data.color
                 nv.setNavigationBarHidden(false, animated: true)
             }
             if abs(tableViewContentOffsetY) < cellHeaderHeight + 100, !nv.isNavigationBarHidden {
                 nv.setNavigationBarHidden(true, animated: true)
             }
         }
+    }
+    
+    private func transformCell(_ cell: CollectionSemiModalViewCell, baseRect: CGRect) {
+        switchDisplayNavigationBar(data: cell.data)
         /// Cellの拡大中は横スクロールできないように
         collectionView.isScrollEnabled = tableViewContentOffsetY == 0
 
@@ -193,6 +212,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
 }
 
+// MARK: - Make Self ViewController
 extension CollectionSemiModalViewController {
     static func make(dataList: [ViewData], selectedIndex: Int) -> CollectionSemiModalViewController {
         let sb = UIStoryboard(name: "CollectionSemiModalViewController", bundle: nil)
@@ -203,12 +223,14 @@ extension CollectionSemiModalViewController {
     }
 }
 
+// MARK: - UIGestureRecognizerDelegate Methods
 extension CollectionSemiModalViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
 
+/// CustomCollectionViewFlowLayout
 final class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
     let edgeSideMargin: CGFloat = 24
     
