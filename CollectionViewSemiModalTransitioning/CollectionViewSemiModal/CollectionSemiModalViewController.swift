@@ -38,10 +38,19 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
                 .compactMap { $0 as? CollectionSemiModalViewCell }
                 .forEach { $0.updateBounces(false) }
         }
+        interactor.changedHandler = { [weak self] offsetY in
+            self?.collectionView.frame.origin = CGPoint(x: 0, y: offsetY)
+        }
+        interactor.finishHandler = { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
         interactor.resetHandler = { [weak self] in
-            self?.collectionView.visibleCells
-                .compactMap { $0 as? CollectionSemiModalViewCell }
-                .forEach { $0.updateBounces(true) }
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
+                self?.collectionView.frame.origin = CGPoint(x: 0, y: 0)
+                self?.collectionView.visibleCells
+                    .compactMap { $0 as? CollectionSemiModalViewCell }
+                    .forEach { $0.updateBounces(true) }
+            }, completion: nil)
         }
     }
     

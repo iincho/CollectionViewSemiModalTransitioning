@@ -13,42 +13,46 @@ extension OverCurrentTransitionable {
 
 extension OverCurrentTransitionable {
     func handleTransitionGesture(_ sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: view)
+        let offsetY = translation.y - interactor.startInteractionTranslationY
 
         switch interactor.state {
         case .shouldStart:
             interactor.state = .hasStarted
-            dismiss(animated: true, completion: nil)
         case .hasStarted, .shouldFinish:
+            // 初期位置よりも上へのスクロールの場合、インタラクション終了
+            if offsetY < 0 {
+                interactor.state = .none
+                interactor.reset()
+                return
+            }
             break
         case .none:
             return
         }
-
-        let translation = sender.translation(in: view)
-        let verticalMovement = (translation.y - interactor.startInteractionTranslationY) / view.bounds.height
+        
+        let verticalMovement = offsetY / view.bounds.height
         let downwardMovement = fmaxf(Float(verticalMovement), 0.0)
         let downwardMovementPercent = fminf(downwardMovement, 1.0)
         let progress = CGFloat(downwardMovementPercent)
 
         switch sender.state {
         case .changed:
+            interactor.changed(by: offsetY)
             if progress > percentThreshold || sender.velocity(in: view).y > shouldFinishVerocityY {
                 interactor.state =  .shouldFinish
             } else {
                 interactor.state =  .hasStarted
             }
-            interactor.update(progress)
         case .cancelled:
-            interactor.cancel()
             interactor.reset()
         case .ended:
             switch interactor.state {
             case .shouldFinish:
                 interactor.finish()
             case .hasStarted, .none, .shouldStart:
-                interactor.cancel()
+                interactor.reset()
             }
-            interactor.reset()
         default:
             break
         }

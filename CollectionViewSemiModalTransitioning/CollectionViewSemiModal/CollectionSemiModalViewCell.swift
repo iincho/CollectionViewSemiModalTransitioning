@@ -111,7 +111,6 @@ extension CollectionSemiModalViewCell: UITableViewDelegate, UITableViewDataSourc
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         /// TableView ScrollDown
-        print("offsetY: \(scrollView.contentOffset.y)")
         scrollViewDidScrollHandler?(scrollView.contentOffset.y)
     }
 }

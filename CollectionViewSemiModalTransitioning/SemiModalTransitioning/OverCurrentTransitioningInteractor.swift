@@ -1,6 +1,6 @@
 import UIKit
 
-class OverCurrentTransitioningInteractor: UIPercentDrivenInteractiveTransition {
+class OverCurrentTransitioningInteractor {
     enum State {
         case none
         case shouldStart
@@ -13,19 +13,13 @@ class OverCurrentTransitioningInteractor: UIPercentDrivenInteractiveTransition {
     var startInteractionTranslationY: CGFloat = 0
 
     var startHandler: (() -> Void)?
+    
+    var changedHandler: ((_ offsetY: CGFloat) -> Void)?
 
+    var finishHandler: (() -> Void)?
+    
     var resetHandler: (() -> Void)?
-    
-    override func cancel() {
-        completionSpeed = percentComplete
-        super.cancel()
-    }
-    
-    override func finish() {
-        completionSpeed = 1.0 - percentComplete
-        super.finish()
-    }
-    
+
     func setStartInteractionTranslationY(_ translationY: CGFloat) {
         switch state {
         case .shouldStart:
@@ -45,7 +39,15 @@ class OverCurrentTransitioningInteractor: UIPercentDrivenInteractiveTransition {
             break
         }
     }
+    
+    func changed(by offsetY: CGFloat) {
+        changedHandler?(offsetY)
+    }
 
+    func finish() {
+        finishHandler?()
+    }
+    
     func reset() {
         state = .none
         startInteractionTranslationY = 0

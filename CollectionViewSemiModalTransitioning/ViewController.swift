@@ -71,7 +71,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         
         let vc = CollectionSemiModalViewController.make(dataList: dataList, selectedIndex: indexPath.row)
         let nv = UINavigationController(rootViewController: vc)
-        customTransition.interactor = vc.interactor
         nv.transitioningDelegate = customTransition
         nv.modalPresentationStyle = .custom
         present(nv, animated: true, completion: nil)
