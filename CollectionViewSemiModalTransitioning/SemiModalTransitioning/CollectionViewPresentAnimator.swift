@@ -55,20 +55,16 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
     
     private func presentTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let fromVC = transitionContext.viewController(forKey: .from) as! ViewController
-        let toNv = transitionContext.viewController(forKey: .to) as! UINavigationController
-        let toVC = toNv.viewControllers.first as! CollectionSemiModalViewController
+        let toNC = transitionContext.viewController(forKey: .to) as! UINavigationController
+        let toVC = toNC.viewControllers.first as! CollectionSemiModalViewController
         let finalToVCFrame = toVC.view.frame
         let containerView = transitionContext.containerView
-        
-        toVC.beginAppearanceTransition(true, animated: true)
-        toVC.endAppearanceTransition()
         
         let selectedIndexPath = fromVC.collectionView.indexPathsForSelectedItems!.first!
 
         // 通常、このタイミングで取得できる[遷移先]のvisibleCellsは先頭2つのCellとなる。本来はタップしたCell＋前後のCellがほしい。
-        // resizableSnapshotView(from: afterScreenUpdates: withCapInsets:)を使い、afterScreenUpdates: trueとしてスナップショットを取得することで、
-        // 描画完了後のViewを生成するとともに、目的のCellがvisibleCellsに格納されるようになる。
-        if let _ = toVC.view.resizableSnapshotView(from: finalToVCFrame, afterScreenUpdates: true, withCapInsets: .zero) {
+        // snapshotView(afterScreenUpdates: true)によりスナップショットを取得することで、描画完了後のViewを生成するとともに目的のCellがvisibleCellsに格納されるようになる。
+        if toVC.view.snapshotView(afterScreenUpdates: true) != nil {
         
             // 遷移元Cell関連
             // 遷移元Cellの座標をもとにアニメーション開始位置を決める。
@@ -132,9 +128,10 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
                 return view
             }
     
-            toVC.view.alpha = 0
-            
-            containerView.addSubview(toVC.view)
+            // アニメーションに関してtoVCを主に操作しているが、containerViewへ追加するのはあくまでUINavigationControllerのViewである必要がある。
+            // toVCでも遷移自体は完了するが、遷移後画面がちらついたり詳細への遷移がおかしくなることがある。
+            toNC.view.isHidden = true
+            containerView.addSubview(toNC.view)
             animationToCells.forEach { containerView.addSubview($0) }
             animationColorViews.forEach { containerView.addSubview($0) }
             
@@ -148,7 +145,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
                 }
                 
             }, completion: { _ in
-                toVC.view.alpha = 1
+                toNC.view.isHidden = false
                 toCells.forEach { $0.switchTitleColorView(isClear: false) }
                 animationToCells.forEach { $0.removeFromSuperview() }
                 animationColorViews.forEach { $0.removeFromSuperview() }
@@ -164,10 +161,6 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
                 transitionContext.completeTransition(true)
             })
         }
-    }
-    
-    private func copyToVC(_ vc: CollectionSemiModalViewController) -> CollectionSemiModalViewController {
-        return vc
     }
 
     private func dismissalTransition(using transitionContext: UIViewControllerContextTransitioning) {
