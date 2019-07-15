@@ -78,6 +78,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
             // Frame指定する際、前後のCellはCollectionViewの改行を考慮し、TargetCellの左右に並ぶよう調整している
             let targetCell = fromVC.collectionView.cellForItem(at: selectedIndexPath)!
             let targetConvertFrame = targetCell.convert(targetCell.bounds, to: fromVC.view)
+            // TODO: minimumLineSpacingはLayoutによって実際のCell間隔とズレが生じる。改行があるため、単純に前後のCell.originの比較では無いため今回は妥協している。
             let cellSpacing = (fromVC.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0
             
             var fromCellDataList: [AnimationCellData] = []
@@ -186,6 +187,7 @@ final class CollectionViewPresentAnimator: NSObject, UIViewControllerAnimatedTra
         }
         let targetToCell = toVC.collectionView.cellForItem(at: targetToIndexPath)!
         let targetConvertFrame = targetToCell.convert(targetToCell.bounds, to: toVC.view)
+        // TODO: minimumLineSpacingはLayoutによって実際のCell間隔とズレが生じる。改行があるため、単純に前後のCell.originの比較では無いため今回は妥協している。
         let cellSpacing = (fromVC.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0
         var toCellDataList: [AnimationCellData] = []
         // PrevCell
