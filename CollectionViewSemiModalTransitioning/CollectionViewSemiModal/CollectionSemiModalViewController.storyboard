@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FOB-jc-TtN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FOB-jc-TtN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,14 +13,14 @@
         <!--Collection Semi Modal View Controller-->
         <scene sceneID="k2J-BU-Cb1">
             <objects>
-                <viewController storyboardIdentifier="CollectionSemiModalViewController" id="FOB-jc-TtN" customClass="CollectionSemiModalViewController" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CollectionSemiModalViewController" automaticallyAdjustsScrollViewInsets="NO" id="FOB-jc-TtN" customClass="CollectionSemiModalViewController" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Me-mp-gbL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Klc-14-dde">
-                                <rect key="frame" x="0.0" y="220" width="375" height="447"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="mGi-aJ-kiy" customClass="CustomCollectionViewFlowLayout" customModule="CollectionViewSemiModalTransitioning" customModuleProvider="target"/>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7QP-x9-r8o">
@@ -36,12 +36,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Klc-14-dde" firstAttribute="bottom" secondItem="0Me-mp-gbL" secondAttribute="bottom" id="VxA-K0-fEZ"/>
-                            <constraint firstItem="Klc-14-dde" firstAttribute="leading" secondItem="TdF-e1-3nn" secondAttribute="leading" id="c6t-f4-olm"/>
-                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="TdF-e1-3nn" secondAttribute="top" constant="200" id="rj6-b9-En0"/>
-                            <constraint firstItem="Klc-14-dde" firstAttribute="trailing" secondItem="TdF-e1-3nn" secondAttribute="trailing" id="scG-bi-3LN"/>
+                            <constraint firstAttribute="bottom" secondItem="Klc-14-dde" secondAttribute="bottom" id="5ZK-B4-iXw"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="leading" secondItem="7vK-YE-vQ0" secondAttribute="leading" id="c6t-f4-olm"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="top" secondItem="0Me-mp-gbL" secondAttribute="top" id="qmh-18-1ez"/>
+                            <constraint firstItem="Klc-14-dde" firstAttribute="trailing" secondItem="7vK-YE-vQ0" secondAttribute="trailing" id="scG-bi-3LN"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="TdF-e1-3nn"/>
+                        <viewLayoutGuide key="safeArea" id="7vK-YE-vQ0"/>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="Klc-14-dde" id="9wa-Yq-rvb"/>

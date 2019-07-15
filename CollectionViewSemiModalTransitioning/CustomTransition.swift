@@ -57,7 +57,7 @@ class CustomTransition: NSObject, UIViewControllerTransitioningDelegate, UIViewC
         
         // 遷移元のセルの取得
         
-        let cell:CollectionViewCell = firstViewController.collectionView?.cellForItem(at: (firstViewController.collectionView?.indexPathsForSelectedItems?.first)!) as! CollectionViewCell
+        let cell:CollectionSemiModalViewCell = firstViewController.collectionView?.cellForItem(at: (firstViewController.collectionView?.indexPathsForSelectedItems?.first)!) as! CollectionSemiModalViewCell
         // 遷移元のセルのイメージビューからアニメーション用のビューを作成
         let animationView = UIView()
         animationView.addSubview(cell.tableView!)
