@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     private var dataList: [ViewData] = []
-    private let customTransition = OverCurrentTransitioningDelegate()
+    private let customTransition = SemiModalTransitioningDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()

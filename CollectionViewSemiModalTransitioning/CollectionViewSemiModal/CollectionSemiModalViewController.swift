@@ -8,23 +8,24 @@
 
 import UIKit
 
-final class CollectionSemiModalViewController: UIViewController, OverCurrentTransitionable {
-    var selectedIndex: Int = 0
+final class CollectionSemiModalViewController: UIViewController, DismissalTransitionable {
+    // DismissalTransitionable Property
+    let percentThreshold: CGFloat = 0.2
+    let shouldFinishVerocityY: CGFloat = 1200
+    let interactor = DismissalTransitioningInteractor()
+    
+    private let visibleNaviBarOffsetY: CGFloat = 100
+    private let cellHeaderHeight: CGFloat = 72
+    
+    var selectedIndex = 0
+    private var indexOfCellBeforeDragging = 0
+    private var tableViewContentOffsetY: CGFloat = 0
+    private var isScrollingCollectionView = false
     private var isFirst = true
     private var dataList: [ViewData] = []
     
-    var percentThreshold: CGFloat = 0.2
-    var interactor = OverCurrentTransitioningInteractor()
-
-    private let visibleNaviBarOffsetY: CGFloat = 100
-    private let cellHeaderHeight: CGFloat = 72
-    private var tableViewContentOffsetY: CGFloat = 0
-    private var isScrollingCollectionView = false
-    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var layout: CustomCollectionViewFlowLayout!
-    
-    private var indexOfCellBeforeDragging = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,12 +62,13 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         collectionView.backgroundColor = .clear
         layout.prepare()
 
-        // ナビゲーションバーの表示制御を行う場合、表示切り替えごとにcontentInsetが変動し、それにより表示が崩れたりCollectionViewのサイズがおかしくなってスクロールができなくなる
-        // contentInsetAdjustmentBehavior の設定をCollectionViewと、Cell内部のScrollViewで変動しないよう.neverを設定することできれいに動くようになる。
-        // また、CollectionViewの制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
+        // ナビゲーションバーの表示制御を行う場合、表示切り替えごとにcontentInsetが変動し、それにより表示が崩れたりCollectionViewのサイズがおかしくなってスクロールができなくなる。
+        // 対策として、contentInsetAdjustmentBehavior の設定をCollectionViewとCell内部のScrollViewで変動しないよう、.neverに設定する。
+        // 合わせて、CollectionViewの上方向制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
         collectionView.contentInsetAdjustmentBehavior = .never
     }
     
+    /// OverCurrentTransitioningInteractorのセットアップ 各種ハンドラーのセット
     private func setupInteractor() {
         interactor.startHandler = { [weak self] in
             self?.collectionView.visibleCells
@@ -93,8 +95,11 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         dismiss(isInteractive: false)
     }
     
+    /// DismissのAnimation設定
+    ///
+    /// - Parameter isInteractive: InteractiveなDismissAnimationが必要な場合: true, 通常のDismissAnimationの場合: false
     private func dismiss(isInteractive: Bool) {
-        if let delegate = navigationController?.transitioningDelegate as? OverCurrentTransitioningDelegate {
+        if let delegate = navigationController?.transitioningDelegate as? SemiModalTransitioningDelegate {
             delegate.isInteractiveDismissal = isInteractive
         }
         self.navigationController?.dismiss(animated: true, completion: nil)
@@ -109,6 +114,7 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         handleTransitionGesture(sender, tableViewContentOffsetY: tableViewContentOffsetY)
     }
     
+    /// CollectionViewの水平方向の位置を元に、中央付近にあるCollectionViewCellのindexを返却
     private func indexOfMajorCell() -> Int {
         let itemWidth = layout.pageWidth
         let proportionalOffset = layout.collectionView!.contentOffset.x / itemWidth
@@ -155,6 +161,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     }
     
     /// NavigationBarの表示制御
+    /// 一定以上TableViewがスクロールされている場合にナビバーを表示する。
     private func switchDisplayNavigationBar(data: ViewData) {
         if let nv = navigationController {
             if cellHeaderHeight + visibleNaviBarOffsetY <= abs(tableViewContentOffsetY), nv.isNavigationBarHidden {
@@ -168,13 +175,17 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
         }
     }
     
+    /// TableViewのスクロールに合わせて、画面内のCollectionViewCellのFrameを制御
+    ///
+    /// - Parameters:
+    ///   - cell: TableViewをスクロールしているCollectionViewCell
+    ///   - baseRect: CollectionViewCell初期位置のframe
     private func transformCell(_ cell: CollectionSemiModalViewCell, baseRect: CGRect) {
         switchDisplayNavigationBar(data: cell.data)
-        /// Cellの拡大中は横スクロールできないように
+        // Cellの拡大中は横スクロールできないよう、TableViewのスクロール位置により制御
         collectionView.isScrollEnabled = tableViewContentOffsetY == 0
 
-        /// CellWidthが画面幅まで拡大するのが完了する高さ
-        let targetHeight = cellHeaderHeight + visibleNaviBarOffsetY
+        let targetHeight = cellHeaderHeight + visibleNaviBarOffsetY // CellWidthが画面幅まで拡大するのが完了する高さ
         let verticalMovement = tableViewContentOffsetY / targetHeight
         let upwardMovement = fmaxf(Float(verticalMovement), 0.0)
         let upwardMovementPercent = fminf(upwardMovement, 1.0)
@@ -186,7 +197,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
                             y: baseRect.origin.y,
                             width: newWidth,
                             height: baseRect.size.height)
-        // 前後のCollectionViewCellを動かす。
+        // 前後のCollectionViewCellを動かす
         collectionView.visibleCells.forEach { vCell in
             if vCell.tag < cell.tag {
                 vCell.frame.origin.x = (baseRect.origin.x - layout.pageWidth) - CGFloat(transformX / 2)
@@ -206,30 +217,34 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
         isScrollingCollectionView = true
     }
     
+    
+    /// CollectionViewの横スクロールを必ず中央で止まるように制御している
+    /// ドラッグ完了位置(Cell半分以上スクロール)、もしくは、スワイプ時の速度のどちらかが該当条件を満たしていた場合に、前後のCollectionViewCellの中央までスクロールするよう制御している
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        /// CollectionViewの横スクロールを必ず中央で止まるように制御
         isScrollingCollectionView = false
+        // 横スクロールの速度閾値
+        let swipeVelocityThreshold: CGFloat = 0.5
         
-        // Stop scrollView sliding:
+        // 横スクロールを現在の位置で止め、現在の横スクロール位置から中央に表示されるCollectionViewCellのindexを取得
         targetContentOffset.pointee = scrollView.contentOffset
-
-        // calculate where scrollView should snap to:
         let indexOfMajorCell = self.indexOfMajorCell()
 
-        // calculate conditions:
         let dataSourceCount = collectionView(collectionView!, numberOfItemsInSection: 0)
-        let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
+        // 横スクロールの速度が次のCellへスライドする閾値を超えているか(かつindexが範囲内)
         let hasEnoughVelocityToSlideToTheNextCell = indexOfCellBeforeDragging + 1 < dataSourceCount && velocity.x > swipeVelocityThreshold
-        let hasEnoughVelocityToSlideToThePreviousCell = indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
+        // 横スクロールの速度が前のCellへスライドする閾値を超えているか(かつindexが範囲内)
+        let hasEnoughVelocityToSlideToThePrevCell = indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
+        // ドラッグ開始前のIndexと現在のIndexが一致しているか
         let majorCellIsTheCellBeforeDragging = indexOfMajorCell == indexOfCellBeforeDragging
-        let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
+        // スワイプ速度による前後Cellへのスクロールを行うか
+        let didSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePrevCell)
 
-        if didUseSwipeToSkipCell {
-
+        if didSwipeToSkipCell {
+            // スワイプ速度による前後スクロール制御
             let snapToIndex = indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
             let toValue = layout.pageWidth * CGFloat(snapToIndex)
 
-            // Damping equal 1 => no oscillations => decay animation:
+            // usingSpringWithDamping: 1 振動なし、initialSpringVelocity: アニメーション初速をCollectionViewの横スクロール速度に設定
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
                 scrollView.contentOffset = CGPoint(x: toValue, y: 0)
                 scrollView.layoutIfNeeded()
@@ -238,7 +253,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
             })
 
         } else {
-            // This is a much better way to scroll to a cell:
+            // indexによるスクロール位置の更新
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
             layout.collectionView!.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             selectedIndex = indexOfMajorCell

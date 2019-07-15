@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class OverCurrentTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+final class SemiModalTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
     var isInteractiveDismissal: Bool = true
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {

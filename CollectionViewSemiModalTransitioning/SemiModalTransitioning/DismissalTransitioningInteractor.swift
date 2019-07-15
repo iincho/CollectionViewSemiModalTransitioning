@@ -1,6 +1,6 @@
 import UIKit
 
-class OverCurrentTransitioningInteractor {
+class DismissalTransitioningInteractor {
     enum State {
         case none
         case hasStarted
@@ -26,13 +26,12 @@ class OverCurrentTransitioningInteractor {
         }
     }
     
-    /// State更新
-    ///
+    /// スクロール位置によるState更新
     ///
     /// - Parameters:
     ///   - translationY: CollectionViewGestrueTranslationY
     ///   - tableViewContentOffsetY: TableViewのScrollContentOffsetY　ドラッグによる更新されたOffsetY (慣性スクロールは含まない)
-    func updateState(translationY: CGFloat, tableViewContentOffsetY: CGFloat) {
+    func updateStateWithTranslation(y translationY: CGFloat, tableViewContentOffsetY: CGFloat) {
         switch state {
         case .none:
             if tableViewContentOffsetY <= 0 {
