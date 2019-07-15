@@ -3,7 +3,6 @@ import UIKit
 class OverCurrentTransitioningInteractor {
     enum State {
         case none
-        case shouldStart
         case hasStarted
         case shouldFinish
     }
@@ -20,26 +19,38 @@ class OverCurrentTransitioningInteractor {
     
     var resetHandler: (() -> Void)?
 
-    func setStartInteractionTranslationY(_ translationY: CGFloat) {
+    var shouldStopInteraction: Bool {
         switch state {
-        case .shouldStart:
-            /// Interaction開始可能な際にInteraction開始までの間更新し続けることで、開始時のYを保持する
-            startInteractionTranslationY = translationY
-        case .hasStarted, .shouldFinish, .none:
-            break
-        }
-    }
-
-    func updateStateShouldStartIfNeeded() {
-        switch state {
-        case .none:
-            state = .shouldStart
-            startHandler?()
-        case .shouldStart, .hasStarted, .shouldFinish:
-            break
+        case .none: return true
+        case .hasStarted, .shouldFinish: return false
         }
     }
     
+    /// State更新
+    ///
+    ///
+    /// - Parameters:
+    ///   - translationY: CollectionViewGestrueTranslationY
+    ///   - tableViewContentOffsetY: TableViewのScrollContentOffsetY　ドラッグによる更新されたOffsetY (慣性スクロールは含まない)
+    func updateState(translationY: CGFloat, tableViewContentOffsetY: CGFloat) {
+        switch state {
+        case .none:
+            if tableViewContentOffsetY <= 0 {
+                // Interaction開始できる状態になったら、現在のCollectionViewGestureのtranslationYを記憶し、Interaction中のstateへ更新
+                // startInteractionTranslationYを記憶することで、TableViewスクロール中から連続的にDismissアニメーションにつなげることができる
+                startInteractionTranslationY = translationY
+                state = .hasStarted
+                startHandler?()
+            }
+        case .hasStarted, .shouldFinish:
+            // 初期位置よりも上へのスクロールの場合、インタラクション終了
+            if translationY - startInteractionTranslationY < 0 {
+                state = .none
+                reset()
+            }
+        }
+    }
+
     func changed(by offsetY: CGFloat) {
         changedHandler?(offsetY)
     }

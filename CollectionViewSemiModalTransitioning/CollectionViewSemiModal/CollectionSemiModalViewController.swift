@@ -13,9 +13,10 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     private var isFirst = true
     private var dataList: [ViewData] = []
     
-    var percentThreshold: CGFloat = 0.3
+    var percentThreshold: CGFloat = 0.2
     var interactor = OverCurrentTransitioningInteractor()
 
+    private let visibleNaviBarOffsetY: CGFloat = 100
     private let cellHeaderHeight: CGFloat = 72
     private var tableViewContentOffsetY: CGFloat = 0
     private var isScrollingCollectionView = false
@@ -27,15 +28,46 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
-        
+        setupNavigation()
+        setupViews()
+        setupInteractor()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if isFirst {
+            collectionView.scrollToItem(at: IndexPath(row: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
+            isFirst = false
+        }
+    }
+    
+    private func setupNavigation() {
         navigationController?.isNavigationBarHidden = true
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
         navigationItem.leftBarButtonItem?.tintColor = .white
+    }
 
-        setupViews()
-        
+    private func setupViews() {
+        view.backgroundColor = .clear
+
+        let collectionViewGesture = UIPanGestureRecognizer(target: self, action: #selector(collectionViewDidDragging(_:)))
+        collectionViewGesture.delegate = self
+        collectionView.addGestureRecognizer(collectionViewGesture)
+
+        collectionView.register(cellType: CollectionSemiModalViewCell.self)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = .clear
+        layout.prepare()
+
+        // ナビゲーションバーの表示制御を行う場合、表示切り替えごとにcontentInsetが変動し、それにより表示が崩れたりCollectionViewのサイズがおかしくなってスクロールができなくなる
+        // contentInsetAdjustmentBehavior の設定をCollectionViewと、Cell内部のScrollViewで変動しないよう.neverを設定することできれいに動くようになる。
+        // また、CollectionViewの制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
+        collectionView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    private func setupInteractor() {
         interactor.startHandler = { [weak self] in
             self?.collectionView.visibleCells
                 .compactMap { $0 as? CollectionSemiModalViewCell }
@@ -57,31 +89,6 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if isFirst {
-            collectionView.scrollToItem(at: IndexPath(row: selectedIndex, section: 0), at: .centeredHorizontally, animated: false)
-            isFirst = false
-        }
-    }
-
-    private func setupViews() {
-        let collectionViewGesture = UIPanGestureRecognizer(target: self, action: #selector(collectionViewDidScroll(_:)))
-        collectionViewGesture.delegate = self
-        collectionView.addGestureRecognizer(collectionViewGesture)
-
-        collectionView.register(cellType: CollectionSemiModalViewCell.self)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = .clear
-        layout.prepare()
-
-        // ナビゲーションバーの表示制御を行う場合、表示切り替えごとにcontentInsetが変動し、それにより表示が崩れたりCollectionViewのサイズがおかしくなってスクロールができなくなる
-        // contentInsetAdjustmentBehavior の設定をCollectionViewと、Cell内部のScrollViewで変動しないよう.neverを設定することできれいに動くようになる。
-        // また、CollectionViewの制約条件はSafeAreaに対してではなく、SuperViewに対して行う必要がある。
-        collectionView.contentInsetAdjustmentBehavior = .never
-    }
-    
     @objc private func didTapDone() {
         dismiss(isInteractive: false)
     }
@@ -93,15 +100,13 @@ final class CollectionSemiModalViewController: UIViewController, OverCurrentTran
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    @objc private func collectionViewDidScroll(_ sender: UIPanGestureRecognizer) {
+    /// CollectionViewの縦方向スクロールをハンドリング
+    ///
+    /// - Parameter sender: UIPanGestureRecognizer
+    @objc private func collectionViewDidDragging(_ sender: UIPanGestureRecognizer) {
+        // CollectionViewが横方向にスクロールしている間はInteraction開始処理しない。
         if isScrollingCollectionView { return }
-
-        /// Dismiss
-        if tableViewContentOffsetY <= 0 {
-            interactor.updateStateShouldStartIfNeeded()
-        }
-        interactor.setStartInteractionTranslationY(sender.translation(in: view).y)
-        handleTransitionGesture(sender)
+        handleTransitionGesture(sender, tableViewContentOffsetY: tableViewContentOffsetY)
     }
     
     private func indexOfMajorCell() -> Int {
@@ -152,12 +157,12 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
     /// NavigationBarの表示制御
     private func switchDisplayNavigationBar(data: ViewData) {
         if let nv = navigationController {
-            if cellHeaderHeight + 100 <= abs(tableViewContentOffsetY), nv.isNavigationBarHidden {
+            if cellHeaderHeight + visibleNaviBarOffsetY <= abs(tableViewContentOffsetY), nv.isNavigationBarHidden {
                 title = data.title
                 nv.navigationBar.barTintColor = data.color
                 nv.setNavigationBarHidden(false, animated: true)
             }
-            if abs(tableViewContentOffsetY) < cellHeaderHeight + 100, !nv.isNavigationBarHidden {
+            if abs(tableViewContentOffsetY) < cellHeaderHeight + visibleNaviBarOffsetY, !nv.isNavigationBarHidden {
                 nv.setNavigationBarHidden(true, animated: true)
             }
         }
@@ -169,7 +174,7 @@ extension CollectionSemiModalViewController: UICollectionViewDelegate, UICollect
         collectionView.isScrollEnabled = tableViewContentOffsetY == 0
 
         /// CellWidthが画面幅まで拡大するのが完了する高さ
-        let targetHeight = cellHeaderHeight + 100
+        let targetHeight = cellHeaderHeight + visibleNaviBarOffsetY
         let verticalMovement = tableViewContentOffsetY / targetHeight
         let upwardMovement = fmaxf(Float(verticalMovement), 0.0)
         let upwardMovementPercent = fminf(upwardMovement, 1.0)

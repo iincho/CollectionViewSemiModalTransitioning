@@ -12,32 +12,20 @@ extension OverCurrentTransitionable {
 }
 
 extension OverCurrentTransitionable {
-    func handleTransitionGesture(_ sender: UIPanGestureRecognizer) {
+    func handleTransitionGesture(_ sender: UIPanGestureRecognizer, tableViewContentOffsetY: CGFloat) {
         let translation = sender.translation(in: view)
-        let offsetY = translation.y - interactor.startInteractionTranslationY
-
-        switch interactor.state {
-        case .shouldStart:
-            interactor.state = .hasStarted
-        case .hasStarted, .shouldFinish:
-            // 初期位置よりも上へのスクロールの場合、インタラクション終了
-            if offsetY < 0 {
-                interactor.state = .none
-                interactor.reset()
-                return
-            }
-        case .none:
-            return
-        }
+        interactor.updateState(translationY: translation.y, tableViewContentOffsetY: tableViewContentOffsetY)
+        if interactor.shouldStopInteraction { return }
         
-        let verticalMovement = offsetY / view.bounds.height
+        let dismisalOffsetY = translation.y - interactor.startInteractionTranslationY
+        let verticalMovement = dismisalOffsetY / view.bounds.height
         let downwardMovement = fmaxf(Float(verticalMovement), 0.0)
         let downwardMovementPercent = fminf(downwardMovement, 1.0)
         let progress = CGFloat(downwardMovementPercent)
 
         switch sender.state {
         case .changed:
-            interactor.changed(by: offsetY)
+            interactor.changed(by: dismisalOffsetY)
             if progress > percentThreshold || sender.velocity(in: view).y > shouldFinishVerocityY {
                 interactor.state =  .shouldFinish
             } else {
@@ -49,12 +37,11 @@ extension OverCurrentTransitionable {
             switch interactor.state {
             case .shouldFinish:
                 interactor.finish()
-            case .hasStarted, .none, .shouldStart:
+            case .hasStarted, .none:
                 interactor.reset()
             }
         default:
             break
         }
-        print("Interactor State: \(interactor.state)")
     }
 }
